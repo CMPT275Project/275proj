@@ -13,7 +13,7 @@ public class loginController {
     public Statement stmt;
     public Connection con;
 
-    // check login info
+    // check login info， if password matches, a "true" will be returned, and vise versa
     public boolean checkLogin(int id, String password)
     {
         Boolean check = false;
