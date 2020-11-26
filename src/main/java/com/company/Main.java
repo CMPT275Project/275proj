@@ -10,8 +10,8 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
         System.out.println("testtestt02222000est");
-        //registerController testReg = new registerController();
-        //testReg.addUserEmail(123,"asd","asd","","","");
+        registerController testReg = new registerController();
+        testReg.addUserEmail(123,"asd","asd","","","");
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
