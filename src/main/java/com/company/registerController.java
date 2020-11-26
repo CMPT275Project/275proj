@@ -10,25 +10,19 @@ public class registerController {
     //  Database credentials
     static final String USER = "root";
     static final String PASS = "root";
-    public PreparedStatement stmt;
+    public Statement  stmt;
     public Connection con;
 
     //add new user registration info
-    public void addUserEmail(int id, String firstName, String lastName, String email, String password, String roleType) {
+    public void addUserEmail(int id, String firstName, String lastName, String roleType, String email, String password) {
         stmt = null;
         con = null;
         try {
             Class.forName(JDBC_DRIVER);
             con = DriverManager.getConnection(DB_URL, USER, PASS);
-            String sql = "INSERT INTO userLogin VALUES(?,?,?,?,?,?)";
-            stmt = con.prepareStatement(sql);
-            stmt.setInt(1, id);
-            stmt.setString(2, firstName);
-            stmt.setString(3, lastName);
-            stmt.setString(4, email);
-            stmt.setString(5, password);
-            stmt.setString(6, roleType);
-            stmt.executeUpdate();
+            stmt = con.createStatement();
+            String sql = "INSERT INTO userLogin VALUES("+id+",'"+firstName+"','"+lastName+"', '"+roleType+"', '"+email+"', '"+password+"')";
+            stmt.executeUpdate(sql);
             stmt.close();
             con.close();
         } catch (SQLException se) {
@@ -47,9 +41,9 @@ public class registerController {
         try {
             Class.forName(JDBC_DRIVER);
             con = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = con.createStatement();
             String sql = "UPDATE userLogin SET password = '"+password+"' WHERE id = "+id+"";
-            stmt = con.prepareStatement(sql);
-            stmt.executeUpdate();
+            stmt.executeUpdate(sql);
             stmt.close();
             con.close();
         } catch (SQLException se) {
