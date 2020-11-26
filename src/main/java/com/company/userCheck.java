@@ -2,19 +2,19 @@ package com.company;
 
 import java.sql.*;
 
-public class loginController {
+public class userCheck {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://34.83.219.17:3306/connect";
 
-    // Database credentials
+    //  Database credentials
     static final String USER = "root";
     static final String PASS = "root";
     public Statement stmt;
     public Connection con;
 
-    // check login info， if password matches, a "true" will be returned, and vise versa
-    public boolean checkLogin(int id, String password)
+    //apply checking
+    public boolean checking(int id, String checkType, String checkItem)
     {
         boolean check = false;
         stmt = null;
@@ -23,12 +23,12 @@ public class loginController {
             Class.forName(JDBC_DRIVER);
             con = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = con.createStatement();
-            String sql = "SELECT password FROM userLogin U WHERE U.id = "+id+"";
+            String sql = "SELECT "+checkType+" FROM userLogin U WHERE U.id = "+id+"";
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next())
             {
-                String pass = rs.getString("password");
-                check = password.equals(pass);
+                String pass = rs.getString(1);
+                check = checkItem.equals(pass);
             }
             stmt.close();
             con.close();
@@ -39,8 +39,8 @@ public class loginController {
             //Handle errors for Class.forName
             e.printStackTrace();
         }
+        System.out.println("in function checking:" + check);
         return check;
     }
 
-    //check input validation
 }

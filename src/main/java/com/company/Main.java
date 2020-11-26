@@ -10,8 +10,9 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
         System.out.println("testtestt02222000est");
-        loginController testReg = new loginController();
-        boolean result = testReg.checkLogin(234,"hello");
+        registerController testReg = new registerController();
+        //boolean result = testReg.addUserInfo(567, "word","newnewnew", "adm", "asd@sfu.ca", "new");
+        boolean result = testReg.changePassword(345, "","newp");
         System.out.println(result);
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -19,9 +20,9 @@ public class Main {
                     "jdbc:mysql://34.83.219.17:3306/connect","root","root");
             //here sonoo is database name, root is username and password
             Statement stmt = con.createStatement();
-            //String sql = "ALTER TABLE deviceInventory DROP COLUMN numInStock";
+            String sql = "DELETE FROM  userLogin WHERE id = 123";
             //String sql2 = "INSERT INTO userLogin VALUES ('qweqwe', 'qweqwe');";
-            //stmt.executeUpdate(sql);
+            stmt.executeUpdate(sql);
             //stmt.executeUpdate(sql2);
 
             ResultSet rs = stmt.executeQuery("select * from userLogin");
