@@ -14,9 +14,10 @@ public class registerController {
     public Connection con;
 
     //add new user registration info
-    public void addUserEmail(int id, String firstName, String lastName, String roleType, String email, String password) {
+    public boolean addUserEmail(int id, String firstName, String lastName, String roleType, String email, String password) {
         stmt = null;
         con = null;
+        boolean check = false;
         try {
             Class.forName(JDBC_DRIVER);
             con = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -25,6 +26,7 @@ public class registerController {
             stmt.executeUpdate(sql);
             stmt.close();
             con.close();
+            check = true;
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -32,12 +34,14 @@ public class registerController {
             //Handle errors for Class.forName
             e.printStackTrace();
         }
+        return check;
     }
 
     //update user password
-    public void changePassword(int id, String email, String password) {
+    public boolean changePassword(int id, String email, String password) {
         stmt = null;
         con = null;
+        boolean check = false;
         try {
             Class.forName(JDBC_DRIVER);
             con = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -46,6 +50,7 @@ public class registerController {
             stmt.executeUpdate(sql);
             stmt.close();
             con.close();
+            check = true;
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -53,5 +58,6 @@ public class registerController {
             //Handle errors for Class.forName
             e.printStackTrace();
         }
+        return check;
     }
 }
