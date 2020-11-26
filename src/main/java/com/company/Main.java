@@ -12,8 +12,10 @@ public class Main {
         System.out.println("testtestt02222000est");
         registerController testReg = new registerController();
         //boolean result = testReg.addUserInfo(567, "word","newnewnew", "adm", "asd@sfu.ca", "new");
-        boolean result = testReg.changePassword(345, "","newp");
-        System.out.println(result);
+        //boolean result = testReg.changePassword(345, "","newp");
+        //System.out.println(result);
+        boolean testEmail = testReg.emailValid("1@sfuc.ca");
+        System.out.println("check email valid: " + testEmail);
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con=DriverManager.getConnection(

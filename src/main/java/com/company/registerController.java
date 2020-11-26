@@ -1,6 +1,10 @@
 package com.company;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import java.sql.*;
+//import org.apache.commons.validator.routines.EmailValidator;
+
 
 public class registerController {
     // JDBC driver name and database URL
@@ -128,5 +132,12 @@ public class registerController {
         return finalCheck;
     }
 
-    //check input validation
+    //check inputs validation
+    //check if email is Valid
+    public boolean emailValid(String email)
+    {
+        boolean checkValid = false;
+        checkValid = EmailValidator.getInstance().isValid(email);
+        return checkValid;
+    }
 }
