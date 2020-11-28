@@ -12,6 +12,8 @@ public class registerController {
     //  Database credentials
     static final String USER = "275group17";
     static final String PASS = "275group17";
+
+    //public class variables
     public Statement  stmt;
     public Connection con;
     public boolean checkFNUpdate = false;
@@ -21,6 +23,11 @@ public class registerController {
     public boolean checkPwdUpdate = false;
 
     //add new user registration info
+    //take 6 PARAMETERS, output a String result;
+    //if userID exist, result = idExist;
+    //if userID NOT exist, then will add the new user and apply update checking;
+    //if any update checking is false, result = FNUpdWrong / lNUpdWrong / roleTypeUpdWrong / emailUpdWrong / pwdUpdWrong;
+    //if all update checking is true, result = addSuccess;
     public String addUserInfo(int id, String firstName, String lastName, String roleType, String email, String password)
     {
         stmt = null;
@@ -56,23 +63,23 @@ public class registerController {
                 if(checkOneItem(id, "firstName", firstName))
                     checkFNUpdate = true;
                 else
-                    return check = "firstNameWrong";
+                    return check = "FNUpdWrong";
                 if(checkOneItem(id, "lastName", lastName))
                     checkLNUpdate = true;
                 else
-                    return check = "lastNameWrong";
+                    return check = "lNUpdWrong";
                 if(checkOneItem(id, "roleType", roleType))
                     checkTypeUpdate = true;
                 else
-                    return check = "roleTypeWrong";
+                    return check = "roleTypeUpdWrong";
                 if(checkOneItem(id, "email", email))
                     checkEmailUpdate = true;
                 else
-                    return check = "emailWrong";
+                    return check = "emailUpdWrong";
                 if(checkOneItem(id, "password", password))
                     checkPwdUpdate = true;
                 else
-                    return check = "passwordWrong";
+                    return check = "pwdUpdWrong";
                 if(checkFNUpdate && checkLNUpdate && checkTypeUpdate && checkEmailUpdate && checkPwdUpdate)
                     return check = "addSuccess";
             }
@@ -87,6 +94,11 @@ public class registerController {
     }
 
     //update user password
+    //take 2 PARAMETERS, output a String result;
+    //if userID NOT exist, result = idNotExist;
+    //if userID exist, then will change the new user pwd and apply update checking;
+    //if update checking is false, result = pwdUpdWrong;
+    //if update checking is true, result = pwdChangeSuccess
     public String changePassword(int id, String password)
     {
         stmt = null;
@@ -126,10 +138,16 @@ public class registerController {
         //apply checking update
         if(checkOneItem(id, "password", password))
             check = "pwdChangeSuccess";
+        else
+            check = "pwdUpdWrong";
         return check;
     }
 
     //apply checking on ONE item
+    //take 3 PARAMETERS, output a boolean result;
+    //if userID exist, then will apply checking on update;
+    //if update checking is false, result = false;
+    //if update checking is true, result = true;
     public boolean checkOneItem(int id, String checkType, String checkItem)
     {
         boolean checkExist = false;
@@ -176,7 +194,7 @@ public class registerController {
     }
 
     //--------------------check inputs FORMAT validation---------------------------
-    //check if id is valid, can only be number
+    //check if id format is valid, can only be number, returns a boolean result
     public String IDValidator(String id)
     {
         String checkResult = "";
@@ -192,7 +210,11 @@ public class registerController {
         return checkResult;
     }
 
-    //check if email is valid
+    //check if email format is valid, returns a boolean result
+    //The local part can contain:
+    //-alphanumeric characters – A to Z (both upper and lower case) and 0 to 9
+    //-printable characters – !#$%&'*+-/=?^_`{|}~
+    //-a dot . (the local part cannot start and end with a dot, and can’t use the dot consecutively like example..first@mailtrap.io).
     public boolean emailValidator(String email)
     {
         boolean checkValid = false;
@@ -200,7 +222,12 @@ public class registerController {
         return checkValid;
     }
 
-    //check if first name is valid
+    //check if first name is valid, returns a String result
+    //if contains SPACE, result = spaceWrong;
+    //if contains invalid character, result = characterWrong;
+    //if a valid name, result = FNGood;
+    //should only contain character from A - Z;
+    //NO SPACE included;
     public String FNValidator(String firstName)
     {
         String checkResult = "";
@@ -231,7 +258,12 @@ public class registerController {
         return checkResult;
     }
 
-    //check if first name is valid
+    //check if last name is valid, returns a String result
+    //if contains SPACE, result = spaceWrong;
+    //if contains invalid character, result = characterWrong;
+    //if a valid name, result = LNGood;
+    //should only contain character from A - Z;
+    //NO SPACE included;
     public String LNValidator(String lastName)
     {
         String checkResult = "";
@@ -262,7 +294,13 @@ public class registerController {
         return checkResult;
     }
 
-    //check if password is Valid
+    //check if password is Valid, returns a String result
+    //if pwd length is NOT in range, result = lengthWrong;
+    //if contains SPACE, result = spaceWrong;
+    //if contains invalid character, result = characterWrong;
+    //if a valid pwd, result = passwordGood;
+    //should NOT contain special characters !#$%&'*+-/=?^_`{|}~;
+    //NO SPACE included;
     public String passwordValidator(String password)
     {
         String checkResult = "";
@@ -299,6 +337,7 @@ public class registerController {
         return checkResult;
     }
 
+    //public class for connecting DB
     public void connectDB()
     {
         try {

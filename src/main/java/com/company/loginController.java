@@ -10,10 +10,16 @@ public class loginController {
     // Database credentials
     static final String USER = "275group17";
     static final String PASS = "275group17";
+    //public class variables
     public Statement stmt;
     public Connection con;
 
-    // check login info， if password matches, a "true" will be returned, and vise versa
+    // check login info，to see if password matches;
+    //take 2 PARAMETERS, output a String result;
+    //if userID NOT exist, result = idNotExist;
+    //if userID exist, then will check the user's pwd and apply update checking;
+    //if pwd checking is false, result = passwordNotMatch;
+    //if pwd checking is true, result = loginSuccess;
     public String checkLogin(int id, String password)
     {
         String check = "";
@@ -61,7 +67,7 @@ public class loginController {
 
 
     //--------------------check inputs FORMAT validation---------------------------
-    //check if id is valid, can only be number
+    //check if id format is valid, can only be number, returns a boolean result
     public String IDValidator(String id)
     {
         String checkResult = "";
@@ -77,7 +83,13 @@ public class loginController {
         return checkResult;
     }
 
-    //check if password is Valid
+    //check if password is Valid, returns a String result
+    //if pwd length is NOT in range, result = lengthWrong;
+    //if contains SPACE, result = spaceWrong;
+    //if contains invalid character, result = characterWrong;
+    //if a valid pwd, result = passwordGood;
+    //should NOT contain special characters !#$%&'*+-/=?^_`{|}~;
+    //NO SPACE included;
     public String passwordValidator(String password)
     {
         String checkResult = "";
@@ -114,7 +126,7 @@ public class loginController {
         return checkResult;
     }
 
-
+    //public class for connecting DB
     public void connectDB()
     {
         try {
@@ -129,5 +141,4 @@ public class loginController {
         }
     }
 
-    //check input validation
 }
