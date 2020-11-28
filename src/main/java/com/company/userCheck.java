@@ -8,8 +8,8 @@ public class userCheck {
     static final String DB_URL = "jdbc:mysql://34.83.219.17:3306/275";
 
     //  Database credentials
-    static final String USER = "root";
-    static final String PASS = "root";
+    static final String USER = "275group17";
+    static final String PASS = "275group17";
     public Statement stmt;
     public Connection con;
 

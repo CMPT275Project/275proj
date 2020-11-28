@@ -11,7 +11,7 @@ public class Main {
         System.out.println("testtestt02222000est");
         loginController testReg = new loginController();
         //boolean result = testReg.addUserInfo(222,"asdasd","aa","student", "fk@a.ca","qwe");
-        String result = testReg.checkLogin(222, "passord");
+        String result = testReg.checkLogin(222, "password");
         //boolean result = testReg.changePassword(345, "","newp");
         System.out.println(result);
         //boolean testEmail = testReg.emailValid("&'^@sfuc.ca");
@@ -19,7 +19,7 @@ public class Main {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con=DriverManager.getConnection(
-                    "jdbc:mysql://34.83.219.17:3306/275","root","root");
+                    "jdbc:mysql://34.83.219.17:3306/275","275group17","275group17");
             //here sonoo is database name, root is username and password
             Statement stmt = con.createStatement();
             //String sql = "DELETE FROM  userLogin WHERE id = 123";
