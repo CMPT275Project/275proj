@@ -5,7 +5,7 @@ import java.sql.*;
 public class userCheck {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://34.83.219.17:3306/connect";
+    static final String DB_URL = "jdbc:mysql://34.83.219.17:3306/275";
 
     //  Database credentials
     static final String USER = "root";

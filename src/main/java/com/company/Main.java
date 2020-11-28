@@ -6,25 +6,27 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Main {
-
     public static void main(String[] args) {
         // write your code here
         System.out.println("testtestt02222000est");
-        registerController testReg = new registerController();
-        //boolean result = testReg.addUserInfo(567, "word","newnewnew", "adm", "asd@sfu.ca", "new");
+        loginController testReg = new loginController();
+        //boolean result = testReg.addUserInfo(222,"asdasd","aa","student", "fk@a.ca","qwe");
+        String result = testReg.checkLogin(222, "passord");
         //boolean result = testReg.changePassword(345, "","newp");
-        //System.out.println(result);
-        boolean testEmail = testReg.emailValid("1@sfuc.ca");
-        System.out.println("check email valid: " + testEmail);
+        System.out.println(result);
+        //boolean testEmail = testReg.emailValid("&'^@sfuc.ca");
+        //System.out.println("check email valid: " + testEmail);
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con=DriverManager.getConnection(
-                    "jdbc:mysql://34.83.219.17:3306/connect","root","root");
+                    "jdbc:mysql://34.83.219.17:3306/275","root","root");
             //here sonoo is database name, root is username and password
             Statement stmt = con.createStatement();
-            String sql = "DELETE FROM  userLogin WHERE id = 123";
-            //String sql2 = "INSERT INTO userLogin VALUES ('qweqwe', 'qweqwe');";
-            stmt.executeUpdate(sql);
+            //String sql = "DELETE FROM  userLogin WHERE id = 123";
+            //String sql = "CREATE TABLE userLogin(id INTEGER, firstName VARCHAR(255), lastName VARCHAR(255)," +
+                   // "roleType VARCHAR(255), email VARCHAR(255), password VARCHAR(255), PRIMARY KEY(id))";
+            //String sql = "INSERT INTO userLogin VALUES (111,'qweqwe', 'qweqwe','adm','asd@sfu.ca', 'asdasd');";
+            //stmt.executeUpdate(sql);
             //stmt.executeUpdate(sql2);
 
             ResultSet rs = stmt.executeQuery("select * from userLogin");
