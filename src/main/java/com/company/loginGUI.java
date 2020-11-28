@@ -10,7 +10,7 @@ public class loginGUI {
     private static JTextField user_text;
     private static JPasswordField pass_text;
     private static JButton signin, register;
-
+    private static JCheckBox show_pass;
 
     public static void loginWindow() {
         frame = new JFrame("Login");
@@ -46,6 +46,11 @@ public class loginGUI {
         pass_text.setBounds(250,220,150,25);
         main_panel.add(pass_text);
 
+        show_pass = new JCheckBox("Show Password");
+        show_pass.setBounds(250,250,150,25);
+        main_panel.add(show_pass);
+
+
         signin = new JButton("Sign in");
         signin.setBounds(310,290,90,35);
         signin.setFont(new Font("DIALOG", Font.BOLD, 14));
@@ -56,6 +61,7 @@ public class loginGUI {
         register.setFont(new Font("DIALOG", Font.BOLD, 12));
         register.setBorder(BorderFactory.createEmptyBorder());
         main_panel.add(register);
+
 
         frame.setVisible(true);
         //frame.dispose();
