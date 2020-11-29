@@ -1,18 +1,19 @@
 package com.company;
 
+import javax.mail.MessagingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MessagingException {
         // write your code here
         System.out.println("testtestt02222000est");
         loginController testReg = new loginController();
         //boolean result = testReg.addUserInfo(222,"asdasd","aa","student", "fk@a.ca","qwe");
         //String result = testReg.addUserInfo(333, "ccc","c","bb","student","cc@aa.ca","ccc");
-        String result = testReg.changePassword("aa","QSD");
+        String result = testReg.sendPwdInEmail("GROUP17");
         //boolean result = testReg.changePassword(345, "","newp");
         System.out.println(result);
         //boolean testEmail = testReg.emailValid("&'^@sfuc.ca");
@@ -27,7 +28,7 @@ public class Main {
             //String sql = "DROP TABLE userLogin";
             //String sql = "CREATE TABLE userLogin(id INTEGER, username VARCHAR(255), firstName VARCHAR(255), lastName VARCHAR(255)," +
                    // "roleType VARCHAR(255), email VARCHAR(255), password VARCHAR(255), PRIMARY KEY(username))";
-            //String sql = "INSERT INTO userLogin VALUES (111,'qweqwe', 'qweqwe','adm','asd@sfu.ca', 'asdasd');";
+            //String sql = "INSERT INTO userLogin VALUES (444,'GROUP17','LOL', 'lol','student','cmpt275proj@gmail.com', '275group17');";
             //stmt.executeUpdate(sql);
             //stmt.executeUpdate(sql2);
 
