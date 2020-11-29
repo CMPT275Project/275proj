@@ -6,8 +6,6 @@ import javax.mail.internet.*;
 import javax.mail.Session;
 import javax.mail.Transport;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class loginController {
@@ -22,6 +20,7 @@ public class loginController {
     //public class variables
     public Statement stmt;
     public Connection con;
+    public String type;
 
     // check login info，to see if password matches;
     //take 2 PARAMETERS, output a String result;
@@ -48,15 +47,18 @@ public class loginController {
                 rs.close();
                 stmt.close();
                 con.close();
-                return check = "UNNotExist";
+                return "UNNotExist";
             }
             if (checkIDExist) {
                 rs.close();
-                String sql2 = "SELECT password FROM userLogin U WHERE U.username = '"+username+"'";
+                String sql2 = "SELECT password, roleType FROM userLogin U WHERE U.username = '"+username+"'";
                 ResultSet rs2 = stmt.executeQuery(sql2);
                 while(rs2.next()) {
                     String pass = rs2.getString(1);
-                    if(password.equals(pass)) { check = "loginSuccess"; }
+                    String TYPE = rs2.getString(2);
+                    if(password.equals(pass)) {
+                        this.type = TYPE;
+                        check = "loginSuccess"; }
                     else { check = "passwordNotMatch";}
                 }
                 rs2.close();
