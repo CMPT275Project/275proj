@@ -20,7 +20,7 @@ public class loginController {
     //public class variables
     public Statement stmt;
     public Connection con;
-    public String type;
+    public String type = "";
 
     // check login info，to see if password matches;
     //take 2 PARAMETERS, output a String result;

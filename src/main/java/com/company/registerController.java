@@ -249,6 +249,8 @@ public class registerController {
         }
         return finalCheck;
     }
+
+
     //--------------------check inputs FORMAT validation---------------------------
     //check if id format is valid, can only be number, returns a boolean result
     public String IDValidator(String id)
