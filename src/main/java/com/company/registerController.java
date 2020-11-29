@@ -26,8 +26,8 @@ public class registerController {
 
     //add new user registration info
     //take 6 PARAMETERS, output a String result;
-    //if userID exist, result = UNExist;
-    //if userID NOT exist, then will add the new user and apply update checking;
+    //if username exist, result = UNExist;
+    //if username NOT exist, then will add the new user and apply update checking;
     //if any update checking is false, result = IDUpdWrong / FNUpdWrong / lNUpdWrong / roleTypeUpdWrong / emailUpdWrong / pwdUpdWrong;
     //if all update checking is true, result = addSuccess;
     public String addUserInfo(int id, String username, String firstName, String lastName, String roleType, String email, String password)
@@ -301,7 +301,6 @@ public class registerController {
             checkResult = "UNGood";
         return checkResult;
     }
-
 
     //check if email format is valid, returns a boolean result
     //The local part can contain:

@@ -10,11 +10,11 @@ public class Main {
     public static void main(String[] args) throws MessagingException {
         // write your code here
         System.out.println("testtestt02222000est");
-        loginController testReg = new loginController();
+        deviceController testReg = new deviceController();
         //boolean result = testReg.addUserInfo(222,"asdasd","aa","student", "fk@a.ca","qwe");
         //String result = testReg.addUserInfo(333, "ccc","c","bb","student","cc@aa.ca","ccc");
-        String result = testReg.sendPwdInEmail("GROUP17");
-        //boolean result = testReg.changePassword(345, "","newp");
+        //String result = testReg.changePassword("GROUP17","275group17");
+        String result = testReg.deleteDevice(7354);
         System.out.println(result);
         //boolean testEmail = testReg.emailValid("&'^@sfuc.ca");
         //System.out.println("check email valid: " + testEmail);
@@ -26,13 +26,13 @@ public class Main {
             Statement stmt = con.createStatement();
 
             //String sql = "DROP TABLE userLogin";
-            //String sql = "CREATE TABLE userLogin(id INTEGER, username VARCHAR(255), firstName VARCHAR(255), lastName VARCHAR(255)," +
-                   // "roleType VARCHAR(255), email VARCHAR(255), password VARCHAR(255), PRIMARY KEY(username))";
-            //String sql = "INSERT INTO userLogin VALUES (444,'GROUP17','LOL', 'lol','student','cmpt275proj@gmail.com', '275group17');";
+            //String sql = "CREATE TABLE deviceInventory(modelID INTEGER, deviceName VARCHAR(255)," +
+                   // "description VARCHAR(255), availability BOOLEAN, PRIMARY KEY(modelID))";
+            //String sql = "INSERT INTO deviceInventory VALUES (111,'resistor','NA',2)";
             //stmt.executeUpdate(sql);
-            //stmt.executeUpdate(sql2);
+            //stmt.executeUpdate(sql2);s
 
-            ResultSet rs = stmt.executeQuery("select * from userLogin");
+            ResultSet rs = stmt.executeQuery("select * from deviceInventory");
             while(rs.next())
                 System.out.println(rs.getInt(1)+"  "+rs.getString(2));
             con.close();
