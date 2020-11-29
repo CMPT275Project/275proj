@@ -11,7 +11,8 @@ public class Main {
         System.out.println("testtestt02222000est");
         loginController testReg = new loginController();
         //boolean result = testReg.addUserInfo(222,"asdasd","aa","student", "fk@a.ca","qwe");
-        String result = testReg.checkLogin(222, "password");
+        //String result = testReg.addUserInfo(333, "ccc","c","bb","student","cc@aa.ca","ccc");
+        String result = testReg.changePassword("aa","QSD");
         //boolean result = testReg.changePassword(345, "","newp");
         System.out.println(result);
         //boolean testEmail = testReg.emailValid("&'^@sfuc.ca");
@@ -22,9 +23,10 @@ public class Main {
                     "jdbc:mysql://34.83.219.17:3306/275","275group17","275group17");
             //here sonoo is database name, root is username and password
             Statement stmt = con.createStatement();
-            //String sql = "DELETE FROM  userLogin WHERE id = 123";
-            //String sql = "CREATE TABLE userLogin(id INTEGER, firstName VARCHAR(255), lastName VARCHAR(255)," +
-                   // "roleType VARCHAR(255), email VARCHAR(255), password VARCHAR(255), PRIMARY KEY(id))";
+
+            //String sql = "DROP TABLE userLogin";
+            //String sql = "CREATE TABLE userLogin(id INTEGER, username VARCHAR(255), firstName VARCHAR(255), lastName VARCHAR(255)," +
+                   // "roleType VARCHAR(255), email VARCHAR(255), password VARCHAR(255), PRIMARY KEY(username))";
             //String sql = "INSERT INTO userLogin VALUES (111,'qweqwe', 'qweqwe','adm','asd@sfu.ca', 'asdasd');";
             //stmt.executeUpdate(sql);
             //stmt.executeUpdate(sql2);
@@ -37,6 +39,7 @@ public class Main {
             System.out.println(e);
         }
 
+        System.out.println("now test the GUI");
         new loginGUI();
         loginGUI.loginWindow();
 

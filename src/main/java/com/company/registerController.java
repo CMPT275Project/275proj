@@ -14,73 +14,79 @@ public class registerController {
     static final String PASS = "275group17";
 
     //public class variables
-    public Statement  stmt;
+    public Statement stmt;
     public Connection con;
+    public boolean checkIDUpdate = false;
     public boolean checkFNUpdate = false;
     public boolean checkLNUpdate = false;
     public boolean checkTypeUpdate = false;
     public boolean checkEmailUpdate = false;
     public boolean checkPwdUpdate = false;
 
+
     //add new user registration info
     //take 6 PARAMETERS, output a String result;
-    //if userID exist, result = idExist;
+    //if userID exist, result = UNExist;
     //if userID NOT exist, then will add the new user and apply update checking;
-    //if any update checking is false, result = FNUpdWrong / lNUpdWrong / roleTypeUpdWrong / emailUpdWrong / pwdUpdWrong;
+    //if any update checking is false, result = IDUpdWrong / FNUpdWrong / lNUpdWrong / roleTypeUpdWrong / emailUpdWrong / pwdUpdWrong;
     //if all update checking is true, result = addSuccess;
-    public String addUserInfo(int id, String firstName, String lastName, String roleType, String email, String password)
+    public String addUserInfo(int id, String username, String firstName, String lastName, String roleType, String email, String password)
     {
         stmt = null;
         con = null;
         String check = "";
-        boolean checkIDExist = false;
+        boolean checkUNExist = false;
         try {
             connectDB();
             stmt = con.createStatement();
-            String sql = "SELECT * FROM userLogin WHERE id = " + id + "";
+            String sql = "SELECT * FROM userLogin WHERE username ='"+username+"'";
             ResultSet rsId = stmt.executeQuery(sql);
             if (rsId.next()) {
-                int ID = rsId.getInt(1);
-                if (id == ID) {
-                    checkIDExist = true;
+                String USERNAME = rsId.getString("username");
+                if (username.equals(USERNAME)) {
+                    checkUNExist = true;
                     rsId.close();
                     stmt.close();
                     con.close();
-                    return check = "idExist";
+                    return check = "UNExist";
                 }
             } else {
-                checkIDExist = false;
+                checkUNExist = false;
             }
-            if (!checkIDExist) {
+            if (!checkUNExist) {
                 rsId.close();
                 //insert into new info
-                String sql2 = "INSERT INTO userLogin VALUES(" + id + ",'" + firstName + "','" + lastName + "', '" + roleType + "', '" + email + "', '" + password + "')";
+                String sql2 = "INSERT INTO userLogin VALUES('" + id + "','"+username+"','" + firstName + "','" + lastName + "', '" + roleType + "', '" + email + "', '" + password + "')";
                 stmt.executeUpdate(sql2);
                 stmt.close();
                 con.close();
 
                 //apply checking update
-                if(checkOneItem(id, "firstName", firstName))
+                if(checkID(username, "id", id))
+                    checkIDUpdate = true;
+                else
+                    return check = "IDUpdWrong";
+                if(checkOneItem(username, "firstName", firstName))
                     checkFNUpdate = true;
                 else
                     return check = "FNUpdWrong";
-                if(checkOneItem(id, "lastName", lastName))
+                if(checkOneItem(username, "lastName", lastName))
                     checkLNUpdate = true;
                 else
                     return check = "lNUpdWrong";
-                if(checkOneItem(id, "roleType", roleType))
+                if(checkOneItem(username, "roleType", roleType))
                     checkTypeUpdate = true;
                 else
                     return check = "roleTypeUpdWrong";
-                if(checkOneItem(id, "email", email))
+                if(checkOneItem(username, "email", email))
                     checkEmailUpdate = true;
                 else
                     return check = "emailUpdWrong";
-                if(checkOneItem(id, "password", password))
+                if(checkOneItem(username, "password", password))
                     checkPwdUpdate = true;
                 else
                     return check = "pwdUpdWrong";
-                if(checkFNUpdate && checkLNUpdate && checkTypeUpdate && checkEmailUpdate && checkPwdUpdate)
+                if(checkIDUpdate && checkFNUpdate && checkLNUpdate && checkTypeUpdate && checkEmailUpdate && checkPwdUpdate)
                     return check = "addSuccess";
             }
         } catch (SQLException se) {
@@ -95,35 +101,35 @@ public class registerController {
 
     //update user password
     //take 2 PARAMETERS, output a String result;
-    //if userID NOT exist, result = idNotExist;
+    //if userID NOT exist, result = UNNotExist;
     //if userID exist, then will change the new user pwd and apply update checking;
     //if update checking is false, result = pwdUpdWrong;
     //if update checking is true, result = pwdChangeSuccess
-    public String changePassword(int id, String password)
+    public String changePassword(String username, String password)
     {
         stmt = null;
         con = null;
         String check = "";
-        boolean checkIDExist = false;
+        boolean checkUNExist = false;
         try {
             connectDB();
             stmt = con.createStatement();
-            String sql = "SELECT * FROM userLogin WHERE id = " + id + "";
+            String sql = "SELECT * FROM userLogin WHERE username = '"+username+"'";
             ResultSet rsId = stmt.executeQuery(sql);
             if (rsId.next()) {
-                int ID = rsId.getInt(1);
-                if (id == ID) {
-                    checkIDExist = true;
+                String USERNAME = rsId.getString("username");
+                if (username.equals(USERNAME)) {
+                    checkUNExist = true;
                 }
             } else {
                 rsId.close();
                 stmt.close();
                 con.close();
-                return check = "idNotExist";
-            }if (checkIDExist) {
+                return check = "UNNotExist";
+            }if (checkUNExist) {
                 rsId.close();
                 //insert into new info
-                String sql2 = "UPDATE userLogin SET password = '"+password+"' WHERE id = "+id+"";
+                String sql2 = "UPDATE userLogin SET password = '"+password+"' WHERE username = '"+username+"'";
                 stmt.executeUpdate(sql2);
                 stmt.close();
                 con.close();
@@ -136,7 +142,7 @@ public class registerController {
             e.printStackTrace();
         }
         //apply checking update
-        if(checkOneItem(id, "password", password))
+        if(checkOneItem(username, "password", password))
             check = "pwdChangeSuccess";
         else
             check = "pwdUpdWrong";
@@ -148,7 +154,7 @@ public class registerController {
     //if userID exist, then will apply checking on update;
     //if update checking is false, result = false;
     //if update checking is true, result = true;
-    public boolean checkOneItem(int id, String checkType, String checkItem)
+    public boolean checkOneItem(String username, String checkType, String checkItem)
     {
         boolean checkExist = false;
         boolean finalCheck = false;
@@ -157,12 +163,12 @@ public class registerController {
         try {
             connectDB();
             stmt = con.createStatement();
-            String sql = "SELECT * FROM userLogin WHERE id = "+ id +"";
+            String sql = "SELECT * FROM userLogin WHERE username = '"+ username +"'";
             ResultSet rsId = stmt.executeQuery(sql);
             if(rsId.next())
             {
-                int ID = rsId.getInt(1);
-                if(id == ID)
+                String USERNAME = rsId.getString("username");
+                if(username.equals(USERNAME))
                     checkExist = true;
             }
             else
@@ -171,7 +177,7 @@ public class registerController {
             }
             if(checkExist)
             {
-                String newSql = "SELECT "+checkType+" FROM userLogin U WHERE U.id = "+id+"";
+                String newSql = "SELECT "+checkType+" FROM userLogin U WHERE U.username = '"+username+"'";
                 ResultSet rs = stmt.executeQuery(newSql);
                 while(rs.next())
                 {
@@ -193,6 +199,56 @@ public class registerController {
         return finalCheck;
     }
 
+    //apply checking on ID item
+    //take 3 PARAMETERS, output a boolean result;
+    //if userID exist, then will apply checking on update;
+    //if update checking is false, result = false;
+    //if update checking is true, result = true;
+    public boolean checkID(String username, String checkID, int checkItem)
+    {
+        boolean checkExist = false;
+        boolean finalCheck = false;
+        stmt = null;
+        con = null;
+        try {
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "SELECT * FROM userLogin WHERE username = '"+username+"'";
+            ResultSet rsId = stmt.executeQuery(sql);
+            if(rsId.next())
+            {
+                String USERNAME = rsId.getString("username");
+                if(username.equals(USERNAME))
+                    checkExist = true;
+            }
+            else
+            {
+                checkExist = false;
+            }
+            if(checkExist)
+            {
+                String newSql = "SELECT "+checkID+" FROM userLogin U WHERE U.username = '"+username+"'";
+                ResultSet rs = stmt.executeQuery(newSql);
+                while(rs.next())
+                {
+                    int value = rs.getInt("id");
+                    if(value == checkItem)
+                        finalCheck = true;
+                }
+                rs.close();
+            }
+            rsId.close();
+            stmt.close();
+            con.close();
+        }catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return finalCheck;
+    }
     //--------------------check inputs FORMAT validation---------------------------
     //check if id format is valid, can only be number, returns a boolean result
     public String IDValidator(String id)
@@ -209,6 +265,43 @@ public class registerController {
         }
         return checkResult;
     }
+
+    //check if user name is valid, returns a String result
+    //if contains SPACE, result = spaceWrong;
+    //if contains invalid character, result = characterWrong;
+    //if a valid name, result = UNGood;
+    //should only contain character from A - Z;
+    //NO SPACE included;
+    public String UNValidator(String username)
+    {
+        String checkResult = "";
+        boolean check = true;
+        // to check space
+        if (username.contains(" ") && check)
+        {
+            checkResult = "spaceWrong";
+            check = false;
+        }
+        // for special characters
+        else if ((username.contains("@") || username.contains("#")
+                || username.contains("!") || username.contains("~")
+                || username.contains("$") || username.contains("%")
+                || username.contains("^") || username.contains("&")
+                || username.contains("*") || username.contains("(")
+                || username.contains(")") || username.contains("-")
+                || username.contains("+") || username.contains("/")
+                || username.contains(":") || username.contains(".")
+                || username.contains(",") || username.contains("<")
+                || username.contains(">") || username.contains("?")
+                || username.contains("|") || username.contains("'")) && check)
+        {
+            checkResult = "characterWrong";
+        }
+        else
+            checkResult = "UNGood";
+        return checkResult;
+    }
+
 
     //check if email format is valid, returns a boolean result
     //The local part can contain:
@@ -352,3 +445,4 @@ public class registerController {
         }
     }
 }
+
