@@ -12,9 +12,9 @@ public class loginGUI extends Component implements ActionListener {
     private static JLabel title, user_label, pass_label;
     private static JTextField user_text;
     private static JPasswordField pass_text;
-    private static JButton signin, register;
+    private static JButton signin, register, fpass;
     private static JCheckBox show_pass;
-    private static String AC_type = "Admin";
+    protected String AC_type = "Admin";
 
     public void loginWindow() {
 
@@ -60,12 +60,12 @@ public class loginGUI extends Component implements ActionListener {
         main_panel.add(show_pass);
 
         signin = new JButton("Sign in");
-        signin.setBounds(310,290,90,35);
+        signin.setBounds(310,320,90,35);
         signin.setFont(new Font("DIALOG", Font.BOLD, 14));
         signin.addActionListener(this);
         main_panel.add(signin);
 
-        register = new JButton("register");
+        register = new JButton("Register");
         register.setBounds(150,290,60,25);
         register.setFont(new Font("DIALOG", Font.BOLD, 12));
         register.setBorder(BorderFactory.createEmptyBorder());
@@ -73,6 +73,13 @@ public class loginGUI extends Component implements ActionListener {
         register.addActionListener(this);
         main_panel.add(register);
 
+        fpass = new JButton("Forgot Password?");
+        fpass.setBounds(150,330,120,25);
+        fpass.setFont(new Font("DIALOG", Font.BOLD, 12));
+        fpass.setBorder(BorderFactory.createEmptyBorder());
+        fpass.setBackground(Color.lightGray);
+        fpass.addActionListener(this);
+        main_panel.add(fpass);
 
         frame.setVisible(true);
         //frame.dispose();
@@ -100,7 +107,7 @@ public class loginGUI extends Component implements ActionListener {
             loginController login = new loginController();
             System.out.println(uname);
             System.out.println(pass);
-            if(login.checkLogin(uname, pass) == true){
+            if(login.checkLogin(uname, pass)){
                 //new search win
                 frame.dispose();
                 deviceGUI device_win = new deviceGUI();
@@ -115,6 +122,12 @@ public class loginGUI extends Component implements ActionListener {
         if(e.getSource() == register){
             registerGUI reg_win = new registerGUI();
             reg_win.regWindow();
+        }
+
+        if(e.getSource() == fpass){
+            forgotPassGUI fpass_win = new forgotPassGUI();
+            fpass_win.fpassWindow();
+
         }
 
     }
