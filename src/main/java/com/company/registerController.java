@@ -253,17 +253,16 @@ public class registerController {
 
     //--------------------check inputs FORMAT validation---------------------------
     //check if id format is valid, can only be number, returns a boolean result
-    public String IDValidator(String id)
+    public boolean IDValidator(String id)
     {
-        String checkResult = "";
+        boolean checkResult = true;
         try
         {
             Integer.parseInt(id);
-            checkResult = "goodID";
         }
         catch (NumberFormatException e)
         {
-            checkResult = "badID";
+            checkResult = false;
         }
         return checkResult;
     }
@@ -274,14 +273,14 @@ public class registerController {
     //if a valid name, result = UNGood;
     //should only contain character from A - Z;
     //NO SPACE included;
-    public String UNValidator(String username)
+    public boolean UNValidator(String username)
     {
-        String checkResult = "";
+        boolean checkResult = true;
         boolean check = true;
         // to check space
         if (username.contains(" ") && check)
         {
-            checkResult = "spaceWrong";
+            checkResult = false;
             check = false;
         }
         // for special characters
@@ -297,10 +296,10 @@ public class registerController {
                 || username.contains(">") || username.contains("?")
                 || username.contains("|") || username.contains("'")) && check)
         {
-            checkResult = "characterWrong";
+            checkResult = false;
         }
         else
-            checkResult = "UNGood";
+            checkResult = true;
         return checkResult;
     }
 
