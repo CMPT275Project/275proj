@@ -28,9 +28,9 @@ public class loginController {
     //if username exist, then will check the user's pwd and apply update checking;
     //if pwd checking is false, result = passwordNotMatch;
     //if pwd checking is true, result = loginSuccess;
-    public String checkLogin(String username, String password)
+    public boolean checkLogin(String username, String password)
     {
-        String check = "";
+        boolean check = false;
         boolean checkIDExist = false;
         stmt = null;
         con = null;
@@ -47,7 +47,7 @@ public class loginController {
                 rs.close();
                 stmt.close();
                 con.close();
-                return "UNNotExist";
+                return check;
             }
             if (checkIDExist) {
                 rs.close();
@@ -58,8 +58,8 @@ public class loginController {
                     String TYPE = rs2.getString(2);
                     if(password.equals(pass)) {
                         this.type = TYPE;
-                        check = "loginSuccess"; }
-                    else { check = "passwordNotMatch";}
+                        check = true;
+                    }
                 }
                 rs2.close();
                 stmt.close();
@@ -110,10 +110,10 @@ public class loginController {
                 con.close();
             }
         } catch (SQLException se) {
-            //Handle errors for JDBC
+            //Error handling for JDBC
             se.printStackTrace();
         } catch (Exception e) {
-            //Handle errors for Class.forName
+            //Error handling for Class.forName
             e.printStackTrace();
         }
         //apply checking update
@@ -168,10 +168,10 @@ public class loginController {
                 con.close();
             }
         }catch (SQLException se) {
-            //Handle errors for JDBC
+            //Error handling for JDBC
             se.printStackTrace();
         } catch (Exception e) {
-            //Handle errors for Class.forName
+            //Error handling for Class.forName
             e.printStackTrace();
         }
 
@@ -199,10 +199,10 @@ public class loginController {
             message.setText("Hello " + username + ", \n\n" + "Your password for log-in is: " + password +".\n" + "Please keep it safe.\n\n\n" +
                     "Regards,\n\n" + "Device Inventory System Team");
             Transport.send(message);
-            finalResult = "emailSendSuccess";
+            finalResult = "Email sent";
         }
         catch (MessagingException e) {
-            finalResult = "emailSendFailed";
+            finalResult = "Unable to send the email";
             e.printStackTrace();
         }
         return finalResult;
