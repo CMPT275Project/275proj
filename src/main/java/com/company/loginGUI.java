@@ -14,8 +14,11 @@ public class loginGUI extends Component implements ActionListener {
     private static JPasswordField pass_text;
     private static JButton signin, register;
     private static JCheckBox show_pass;
+    private static String AC_type = "Admin";
 
     public void loginWindow() {
+
+        // Initialize all the required components for Login GUI
         frame = new JFrame("Login");
         frame.setSize(600, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,10 +77,13 @@ public class loginGUI extends Component implements ActionListener {
         frame.setVisible(true);
         //frame.dispose();
     }
-
+    public String getType() {
+       return this.AC_type;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //Action for showing password and hiding the password
         if(e.getSource() == show_pass){
             if(show_pass.isSelected()){
                 pass_text.setEchoChar((char)0);
@@ -88,7 +94,6 @@ public class loginGUI extends Component implements ActionListener {
         }
 
         if(e.getSource() == signin){
-
             String error_msg = null;
             String pass = pass_text.getText();
             String uname = user_text.getText();
@@ -97,6 +102,9 @@ public class loginGUI extends Component implements ActionListener {
             System.out.println(pass);
             if(login.checkLogin(uname, pass) == true){
                 //new search win
+                frame.dispose();
+                deviceGUI device_win = new deviceGUI();
+                device_win.deviceWindow();
                 System.out.println("yeahhh login");
             }
             else{

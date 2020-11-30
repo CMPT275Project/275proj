@@ -14,6 +14,8 @@ public class registerGUI extends Component implements ActionListener {
     private static JComboBox acctype_b;
 
     public void regWindow() {
+
+        // Initialize all the required components for register GUI
         frame = new JFrame("Register");
         frame.setSize(500, 800);
         frame.setLocationRelativeTo(null);
@@ -120,6 +122,7 @@ public class registerGUI extends Component implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        // Actionlistner for combobox (drop box)
         if(e.getSource() == acctype_b){
             System.out.println(acctype_b.getSelectedItem());
         }
