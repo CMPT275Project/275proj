@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 public class forgotPassGUI extends Component implements ActionListener {
     private static JFrame frame;
     private static JPanel panel;
-    private static JLabel title, id, email;
-    private static JTextField id_t, email_t;
+    private static JLabel title, uname, email;
+    private static JTextField uname_t, email_t;
     private static JButton submit;
 
 
@@ -30,23 +30,23 @@ public class forgotPassGUI extends Component implements ActionListener {
         title.setBounds(50, 50, 350, 40);
         panel.add(title);
 
-        id = new JLabel("ID");
-        id.setFont(new Font("DIALOG", Font.BOLD, 16));
-        id.setBounds(50,120,150,25);
-        panel.add(id);
-        id_t = new JTextField();
-        id_t.setFont(new Font("DIALOG", Font.PLAIN, 14));
-        id_t.setBounds(150,120,180,25);
-        panel.add(id_t);
+        uname = new JLabel("Username");
+        uname.setFont(new Font("DIALOG", Font.BOLD, 16));
+        uname.setBounds(50,120,150,25);
+        panel.add(uname);
+        uname_t = new JTextField();
+        uname_t.setFont(new Font("DIALOG", Font.PLAIN, 14));
+        uname_t.setBounds(150,120,180,25);
+        panel.add(uname_t);
 
-        email = new JLabel("Email");
+        /*email = new JLabel("Email");
         email.setFont(new Font("DIALOG", Font.BOLD, 16));
         email.setBounds(50,170,150,25);
         panel.add(email);
         email_t = new JTextField();
         email_t.setFont(new Font("DIALOG", Font.PLAIN, 14));
         email_t.setBounds(150,170,180,25);
-        panel.add(email_t);
+        panel.add(email_t);*/
 
         submit = new JButton("Submit");
         submit.setFont(new Font("DIALOG", Font.BOLD, 14));
@@ -59,8 +59,16 @@ public class forgotPassGUI extends Component implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        registerController reg = new registerController();
         if(e.getSource() == submit){
-            //submit reset email
+            String uname_tem = uname_t.getText();
+            if (!reg.checkUname(uname_tem)) {
+                JOptionPane.showMessageDialog(null, "Username does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                //send the email with password
+
+            }
         }
     }
 }

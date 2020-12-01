@@ -99,6 +99,37 @@ public class registerController {
         return check;
     }
 
+    // Check if the username is exist
+    // return true if the username is exist
+    public boolean checkUname(String uname)
+    {
+        stmt = null;
+        con = null;
+        boolean checkUNExist = false;
+        try {
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "SELECT * FROM userLogin WHERE username ='"+uname+"'";
+            ResultSet rsId = stmt.executeQuery(sql);
+            if (rsId.next()) {
+                String USERNAME = rsId.getString("username");
+                if (uname.equals(USERNAME)) {
+                    checkUNExist = true;
+                    rsId.close();
+                    stmt.close();
+                    con.close();
+                }
+            }
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return checkUNExist;
+    }
+
     //update user password
     //take 2 PARAMETERS, output a String result;
     //if userID NOT exist, result = UNNotExist;
@@ -321,69 +352,50 @@ public class registerController {
     //if a valid name, result = FNGood;
     //should only contain character from A - Z;
     //NO SPACE included;
-    public String FNValidator(String firstName)
+    public boolean FNValidator(String name)
     {
-        String checkResult = "";
-        boolean check = true;
-        // to check space
-        if (firstName.contains(" ") && check)
+        boolean checkResult = true;
+        if ((name.contains("@") || name.contains("#")
+                || name.contains("!") || name.contains("~")
+                || name.contains("$") || name.contains("%")
+                || name.contains("^") || name.contains("&")
+                || name.contains("*") || name.contains("(")
+                || name.contains(")") || name.contains("-")
+                || name.contains("+") || name.contains("/")
+                || name.contains(":") || name.contains(".")
+                || name.contains(",") || name.contains("<")
+                || name.contains(">") || name.contains("?")
+                || name.contains("|") || name.contains("'")))
         {
-            checkResult = "spaceWrong";
-            check = false;
+            checkResult = false;
         }
-        // for special characters
-        else if ((firstName.contains("@") || firstName.contains("#")
-                || firstName.contains("!") || firstName.contains("~")
-                || firstName.contains("$") || firstName.contains("%")
-                || firstName.contains("^") || firstName.contains("&")
-                || firstName.contains("*") || firstName.contains("(")
-                || firstName.contains(")") || firstName.contains("-")
-                || firstName.contains("+") || firstName.contains("/")
-                || firstName.contains(":") || firstName.contains(".")
-                || firstName.contains(",") || firstName.contains("<")
-                || firstName.contains(">") || firstName.contains("?")
-                || firstName.contains("|") || firstName.contains("'")) && check)
-        {
-            checkResult = "characterWrong";
-        }
-        else
-            checkResult = "FNGood";
         return checkResult;
     }
 
-    //check if last name is valid, returns a String result
-    //if contains SPACE, result = spaceWrong;
-    //if contains invalid character, result = characterWrong;
-    //if a valid name, result = LNGood;
-    //should only contain character from A - Z;
-    //NO SPACE included;
-    public String LNValidator(String lastName)
+
+    public boolean LNValidator(String name)
     {
-        String checkResult = "";
-        boolean check = true;
+        boolean checkResult = true;
         // to check space
-        if (lastName.contains(" ") && check)
+        if (name.contains(" "))
         {
-            checkResult = "spaceWrong";
-            check = false;
+            checkResult = false;
         }
         // for special characters
-        else if ((lastName.contains("@") || lastName.contains("#")
-                || lastName.contains("!") || lastName.contains("~")
-                || lastName.contains("$") || lastName.contains("%")
-                || lastName.contains("^") || lastName.contains("&")
-                || lastName.contains("*") || lastName.contains("(")
-                || lastName.contains(")") || lastName.contains("-")
-                || lastName.contains("+") || lastName.contains("/")
-                || lastName.contains(":") || lastName.contains(".")
-                || lastName.contains(",") || lastName.contains("<")
-                || lastName.contains(">") || lastName.contains("?")
-                || lastName.contains("|") || lastName.contains("'")) && check)
+        else if ((name.contains("@") || name.contains("#")
+                || name.contains("!") || name.contains("~")
+                || name.contains("$") || name.contains("%")
+                || name.contains("^") || name.contains("&")
+                || name.contains("*") || name.contains("(")
+                || name.contains(")") || name.contains("-")
+                || name.contains("+") || name.contains("/")
+                || name.contains(":") || name.contains(".")
+                || name.contains(",") || name.contains("<")
+                || name.contains(">") || name.contains("?")
+                || name.contains("|") || name.contains("'")))
         {
-            checkResult = "characterWrong";
+            checkResult = false;
         }
-        else
-            checkResult = "LNGood";
         return checkResult;
     }
 

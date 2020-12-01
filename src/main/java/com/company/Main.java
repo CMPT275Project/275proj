@@ -31,7 +31,8 @@ public class Main {
 
             ResultSet rs = stmt.executeQuery("select * from userLogin");
             while(rs.next())
-                System.out.println(rs.getInt(1)+"  "+rs.getString(2) + " " + rs.getString("password"));
+                System.out.println(rs.getInt(1)+"  "+rs.getString(2) + " " + rs.getString("password") + " "
+                        + rs.getString("email"));
             con.close();
         }catch(Exception e){
             System.out.println(e);

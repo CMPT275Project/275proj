@@ -145,9 +145,11 @@ public class loginController {
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 String USERNAME = rs.getString("username");
-                if (username.equals(USERNAME))
+                if (username.equals(USERNAME)) {
                     checkUNExist = true;
-            } else {
+                }
+            }
+            else {
                 rs.close();
                 stmt.close();
                 con.close();
@@ -203,7 +205,7 @@ public class loginController {
         }
         catch (MessagingException e) {
             finalResult = "Unable to send the email";
-            e.printStackTrace();
+            String a = e.getStackTrace().toString();
         }
         return finalResult;
     }

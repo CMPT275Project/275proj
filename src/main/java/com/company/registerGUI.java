@@ -150,13 +150,13 @@ public class registerGUI extends Component implements ActionListener {
 
             if (fname_tem.length() == 0) {
                 error_msg += "Invalid First Name: Empty First Name\n";
-            } else if (!reg.UNValidator(fname_tem)) {
+            } else if (!reg.FNValidator(fname_tem)) {
                 error_msg += "Invalid First Name: Only letters are allowed. No spaces.\n";
             }
 
             if (lname_tem.length() == 0) {
                 error_msg += "Invalid Last Name: Empty Last Name.\n";
-            } else if (!reg.UNValidator(lname_tem)) {
+            } else if (!reg.LNValidator(lname_tem)) {
                 error_msg += "Invalid Last Name: Only letters are allowed. No spaces.\n";
             }
 
@@ -177,21 +177,21 @@ public class registerGUI extends Component implements ActionListener {
                 error_msg += "Invalid Username: Empty Username.\n";
             }
 
-            if ((pass_tem.equals(cpass_tem)) == false) {
+            if (!(pass_tem.equals(cpass_tem))) {
                 error_msg += "Passwords not match.\n";
             }
 
-            if (actype_tem == "--Select Type--") {
+            if (actype_tem.equals("--Select Type--")) {
                 error_msg += "Please select the account type.\n";
             }
 
-            if (error_msg != "") {
+            if (!error_msg.equals("")) {
                 JOptionPane.showMessageDialog(null, error_msg, "Error", JOptionPane.ERROR_MESSAGE);
             }
             else {
                 int id_temp = Integer.parseInt(id_tem);
                 //reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
-                JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Info", JOptionPane.INFORMATION_MESSAGE);
+                //JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
