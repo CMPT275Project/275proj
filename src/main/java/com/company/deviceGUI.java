@@ -2,6 +2,7 @@ package com.company;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,9 +48,10 @@ public class deviceGUI extends Component implements ActionListener {
         rental_pan.setLayout(null);
         account_pan = new JPanel();
         account_pan.setLayout(null);
-        tp.add("Device", device_pan);
-        tp.add("Rental", rental_pan);
-        tp.add("Account", account_pan);
+
+        tp.addTab("a",device_pan);
+        tp.addTab("b", rental_pan);
+        tp.addTab("c", account_pan);
         frame.add(tp);
 
         // Panel for device
@@ -65,9 +67,9 @@ public class deviceGUI extends Component implements ActionListener {
 
         // not working
         DefaultTableModel model = new DefaultTableModel();
-        device_table = new JTable(model);
-        scroll_pane = new JScrollPane(device_table);
-        scroll_pane.setVisible(true);
+        device_table = new JTable(row,col);
+        //scroll_pane = new JScrollPane(device_pan);
+        //scroll_pane.setVisible(true);
 
 
         device_table.setPreferredScrollableViewportSize(new Dimension(100,200));
@@ -77,9 +79,8 @@ public class deviceGUI extends Component implements ActionListener {
         device_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         device_table.setAutoCreateRowSorter(true);
 
-        frame.add(device_table);
+        //frame.add(device_table);
 
-        //Object[] row = new Object[3];
 
         // Panel for rental
 
