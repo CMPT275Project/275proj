@@ -67,7 +67,7 @@ public class forgotPassGUI extends Component implements ActionListener {
             }
             else {
                 //send the email with password
-
+                System.out.println("exist (Fpass)");
             }
         }
     }

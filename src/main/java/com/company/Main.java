@@ -11,7 +11,8 @@ public class Main {
         System.out.println("testtestt02222000est");
         loginController testReg = new loginController();
         //boolean result = testReg.addUserInfo(222,"asdasd","aa","student", "fk@a.ca","qwe");
-        Boolean result = testReg.checkLogin("222", "password");
+
+        /*Boolean result = testReg.checkLogin("222", "password");
         //boolean result = testReg.changePassword(345, "","newp");
         System.out.println(result);
         //boolean testEmail = testReg.emailValid("&'^@sfuc.ca");
@@ -37,9 +38,12 @@ public class Main {
         }catch(Exception e){
             System.out.println(e);
         }
+        */
 
-        loginGUI login_win = new loginGUI();
-        login_win.loginWindow();
+        //loginGUI login_win = new loginGUI();
+        //login_win.loginWindow();
+        deviceGUI de = new deviceGUI();
+        de.deviceWindow();
 
     }
 
