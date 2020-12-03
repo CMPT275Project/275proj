@@ -111,6 +111,7 @@ public class loginGUI extends Component implements ActionListener {
                 //new search win
                 frame.dispose();
                 deviceGUI device_win = new deviceGUI();
+
                 device_win.deviceWindow();
                 System.out.println("yeahhh login");
             }

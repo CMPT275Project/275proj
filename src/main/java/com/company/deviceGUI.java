@@ -16,6 +16,7 @@ public class deviceGUI extends Component implements ActionListener {
     private static JTable device_table;
     private static JScrollPane scroll_pane;
 
+
     public void deviceWindow() {
         //Getting the account type from Login
         loginGUI temp = new loginGUI();
