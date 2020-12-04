@@ -51,9 +51,9 @@ public class deviceGUI extends Component implements ActionListener {
         account_pan = new JPanel();
         account_pan.setLayout(null);
         
-        tp.addTab("a",device_pan);
-        tp.addTab("b", rental_pan);
-        tp.addTab("c", account_pan);
+        tp.addTab("Device",device_pan);
+        tp.addTab("Rental", rental_pan);
+        tp.addTab("Account", account_pan);
        
         
         frame.add(tp);
@@ -62,7 +62,7 @@ public class deviceGUI extends Component implements ActionListener {
         user_label = new JLabel("hsssi");
         user_label.setFont(new Font("DIALOG", Font.BOLD, 15));
         user_label.setBounds(50, 50, 350, 40);
-        //device_pan.add(user_label);
+        device_pan.add(user_label);
 
 
         String[] col = {"Name", "ID", "email","Name", "ID", "email","Name", "ID", "email"};
