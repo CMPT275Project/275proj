@@ -126,13 +126,11 @@ public class loginController {
 
 
     //send pwd to user by email if user forgot the pwd
-    //if username NOT exist, result = UNNotExist;
     //if username exist, then will get the pwd and email for that username;
     //if email sending is failed, result = emailSendFailed;
     //if email sending is success, result = emailSendSuccess;
     public static String sendPwdInEmail(String username) {
         String finalResult = "";
-        boolean checkUNExist = false;
         String password = "";
         String email = "";
         Statement stmt;
@@ -141,34 +139,18 @@ public class loginController {
             Class.forName(JDBC_DRIVER);
             con = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = con.createStatement();
-            String sql = "SELECT * FROM userLogin WHERE username = '" + username + "'";
-            ResultSet rs = stmt.executeQuery(sql);
-            if (rs.next()) {
-                String USERNAME = rs.getString("username");
-                if (username.equals(USERNAME)) {
-                    checkUNExist = true;
-                }
+
+            String sql2 = "SELECT password, email FROM userLogin U WHERE U.username = '"+username+"'";
+            ResultSet rs2 = stmt.executeQuery(sql2);
+            while(rs2.next()) {
+                String pass = rs2.getString(1);
+                String EMAIL = rs2.getString(2);
+                password = pass;
+                email = EMAIL;
             }
-            else {
-                rs.close();
-                stmt.close();
-                con.close();
-                return finalResult = "UNNotExist";
-            }
-            if (checkUNExist) {
-                rs.close();
-                String sql2 = "SELECT password, email FROM userLogin U WHERE U.username = '"+username+"'";
-                ResultSet rs2 = stmt.executeQuery(sql2);
-                while(rs2.next()) {
-                    String pass = rs2.getString(1);
-                    String EMAIL = rs2.getString(2);
-                    password = pass;
-                    email = EMAIL;
-                }
-                rs2.close();
-                stmt.close();
-                con.close();
-            }
+            rs2.close();
+            stmt.close();
+            con.close();
         }catch (SQLException se) {
             //Error handling for JDBC
             se.printStackTrace();
