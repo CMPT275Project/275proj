@@ -1,37 +1,30 @@
 package com.company;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.event.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.Dimension;
 import java.awt.Component;
-import java.util.Date;
-import java.util.List;
 
 public class deviceGUI extends Component implements ActionListener {
     private static JFrame frame;
-    private static JPanel main_panel, device_pan, rental_pan, account_pan;
-    private static JPanel sel_pan;
-    private static JLabel title, date;
-    private static JLabel searchType_l, sID_l, sType_l, aID_l, aType_l, aDes_l,aAvail_l, aCond_l;
-    private static JLabel rID_l, rType_l, rDes_l, eID_l, eType_l, eDes_l, eAvail_l, eCond_l;
+    private static JPanel main_panel, device_pan, account_pan;
+    private static JPanel sel_pan, sel_pan2;
+    private static JLabel title, date, user_icon;
+    private static JLabel searchType_l, sID_l, sType_l, sUname_l, aID_l, aType_l, aDes_l,aAvail_l, aCond_l;
+    private static JLabel rID_l, rType_l, rDes_l, eID_l, eType_l, eDes_l, eAvail_l, eCond_l, borrowID_l, borrowUname_l;
     private static JTextField textField1, textField2, textField3, textField4, textField5, textField6, textField7;
-    private static JTextField sID_t, sType_t, aID_t, aType_t, aDes_t;
-    private static JTextField rID_t, rType_t, rDes_t, eID_t, eType_t, eDes_t;
+    private static JTextField sID_t, sType_t, sUname_t, aID_t, aType_t, aDes_t;
+    private static JTextField rID_t, rType_t, rDes_t, eID_t, eType_t, eDes_t, borrowID_t ,borrowUname_t;
     private static JTabbedPane tp;
     private static JTable device_table;
     private static JScrollPane scrollPane;
-    private static JRadioButton search_sel, add_sel, remove_sel, edit_sel;
+    private static JRadioButton search_sel, add_sel, remove_sel, edit_sel, borrow_sel, return_sel;
     private static JComboBox searchType, aAvail_t, aCond_t, eAvail_t, eCond_t;
-    private static JButton search_b, add_b, remove_b, edit_b, logout;
-
+    private static JButton search_b, add_b, remove_b, edit_b, borrow_b, return_b, logout;
 
     public void deviceWindow() {
         //Getting the account type from Login
@@ -56,13 +49,10 @@ public class deviceGUI extends Component implements ActionListener {
         tp.setFont(font);
         device_pan = new JPanel();
         device_pan.setLayout(null);
-        rental_pan = new JPanel();
-        rental_pan.setLayout(null);
         account_pan = new JPanel();
         account_pan.setLayout(null);
 
         tp.addTab("Device",device_pan);
-        tp.addTab("Rental", rental_pan);
         tp.addTab("Account", account_pan);
         frame.add(tp);
 
@@ -89,24 +79,6 @@ public class deviceGUI extends Component implements ActionListener {
                 {"r006", "resistor", "500 ohms","yes", "NA", "NA","fair"},
                 {"b001", "Bread Board", "Brand A","yes", "NA", "NA","good"},
                 {"b002", "Bread Board", "Brand B (Broken)","No", "NA", "NA","poor"}};
-
-
-        device_table = new JTable();
-        device_table.setEnabled(true);
-        device_table.setModel(new DefaultTableModel(row,col) {
-            boolean[] columnEditables = new boolean[] {
-                    false, false, false, false, false, false, false
-            };
-            public boolean isCellEditable(int row, int column) {
-                // need check!!!
-                return columnEditables[column];
-            }
-        });
-        //int[] selection = device_table.getSelectedRows();
-        //for (int i = 0; i < selection.length; i++) {
-        //selection[i] = device_table.convertRowIndexToModel(selection[i]);
-        //}
-        //device_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JLabel sel_info = new JLabel("You have selected:");
         sel_info.setBounds(50,300,200,25);
@@ -149,11 +121,22 @@ public class deviceGUI extends Component implements ActionListener {
         device_pan.add(textField6);
         device_pan.add(textField7);
 
+
+        // Jtable Setup
+        device_table = new JTable();
+        device_table.setEnabled(true);
+        device_table.setModel(new DefaultTableModel(row,col) {
+            boolean[] columnEditables = new boolean[] {
+                    false, false, false, false, false, false, false
+            };
+            public boolean isCellEditable(int row, int column) {
+                return columnEditables[column];
+            }
+        });
         scrollPane = new JScrollPane();
         scrollPane.setBounds(50,380,620,250);
         scrollPane.setViewportView(device_table);
         device_pan.add(scrollPane);
-
         device_table.setPreferredScrollableViewportSize(new Dimension(100,200));
         device_table.setBounds(400,50,700,50);
         device_table.setFillsViewportHeight(true);
@@ -163,7 +146,7 @@ public class deviceGUI extends Component implements ActionListener {
         //device_table.setAutoCreateRowSorter(true); // this will cause the selection problem
         device_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        // for row selection
+        // For table row selection (device page)
         device_table.getSelectionModel().addListSelectionListener(
                 new ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent event) {
@@ -185,6 +168,8 @@ public class deviceGUI extends Component implements ActionListener {
                         eID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
                         eType_t.setText(String.format(model.getValueAt(selectedRowIndex,1).toString()));
                         eDes_t.setText(String.format(model.getValueAt(selectedRowIndex,2).toString()));
+
+                        borrowID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
                     }
                 }
         );
@@ -217,19 +202,31 @@ public class deviceGUI extends Component implements ActionListener {
         edit_sel.setFont(new Font("DIALOG", Font.BOLD, 14));
         device_pan.add(edit_sel);
 
+        // CAT2
+        borrow_sel = new JRadioButton("Borrow");
+        borrow_sel.setBounds(500, 40, 100,35);
+        borrow_sel.setFont(new Font("DIALOG", Font.BOLD, 14));
+        device_pan.add(borrow_sel);
+        return_sel = new JRadioButton("Rental");
+        return_sel.setBounds(600, 40, 100,35);
+        return_sel.setFont(new Font("DIALOG", Font.BOLD, 14));
+        device_pan.add(return_sel);
+
         // Grouping all the radio button, so that only one can be selected
         ButtonGroup bg = new ButtonGroup();
         bg.add(search_sel);
         bg.add(add_sel);
         bg.add(remove_sel);
         bg.add(edit_sel);
+        bg.add(borrow_sel);
+        bg.add(return_sel);
 
         // Component for search
         searchType_l = new JLabel("Search By");
         searchType_l.setBounds(10,20,100,25);
         search_b = new JButton("Search");
         search_b.setBounds(10,20,100,25);
-        String[] type = {"--Select Type--","Model ID", "Item Type"};
+        String[] type = {"--Select Type--","Model ID", "Item Type", "Username"};
         searchType = new JComboBox(type);
         searchType.setBounds(100,20,120,25);
 
@@ -243,9 +240,14 @@ public class deviceGUI extends Component implements ActionListener {
         sID_t = new JTextField();
         sID_t.setBounds(100,70,120,25);
         sType_l = new JLabel("Item Type");
-        sType_l.setBounds(10,71,100,25);
+        sType_l.setBounds(10,70,100,25);
         sType_t = new JTextField();
         sType_t.setBounds(100,70,120,25);
+        sUname_l = new JLabel("Username");
+        sUname_l.setBounds(10,70,100,25);
+        sUname_t = new JTextField();
+        sUname_t.setBounds(100,70,120,25);
+
 
 
         // Components for add
@@ -339,6 +341,32 @@ public class deviceGUI extends Component implements ActionListener {
         edit_b.setFont(new Font("DIALOG", Font.BOLD, 13));
         edit_b.addActionListener(this);
 
+        // Component for Borrow
+        JLabel borrow_info = new JLabel("Note: Please select the item from the table below.");
+        borrow_info.setBounds(280,20,300,25);
+
+        borrowID_l = new JLabel("Item ID");
+        borrowID_l.setBounds(10,20,100,25);
+        borrowID_t = new JTextField();
+        borrowID_t.setBounds(100,20,130,25);
+        borrowID_t.setEditable(false);
+        borrowID_t.setBorder(BorderFactory.createLineBorder(Color.black));
+        borrowUname_l = new JLabel("Username");
+        borrowUname_l.setBounds(10,60,100,25);
+        borrowUname_t = new JTextField();
+        borrowUname_t.setBounds(100,60,130,25);
+        borrow_b = new JButton("Confirm");
+        borrow_b.setBounds(390,140,90,30);
+        borrow_b.setFont(new Font("DIALOG", Font.BOLD, 13));
+        borrow_b.addActionListener(this);
+
+        // Component for Return
+        return_b = new JButton("Return");
+        return_b.setBounds(390,140,90,30);
+        return_b.setFont(new Font("DIALOG", Font.BOLD, 13));
+        return_b.addActionListener(this);
+
+        // Switching the panel content based on the option
         search_sel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -413,8 +441,38 @@ public class deviceGUI extends Component implements ActionListener {
                 }
             }
         });
+        borrow_sel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (borrow_sel.isSelected()) {
+                    sel_pan.removeAll();
+                    sel_pan.add(borrow_info);
+                    sel_pan.add(borrowID_l);
+                    sel_pan.add(borrowID_t);
+                    sel_pan.add(borrowUname_l);
+                    sel_pan.add(borrowUname_t);
+                    sel_pan.add(borrow_b);
+                    sel_pan.revalidate();
+                    sel_pan.repaint();
+                }
+            }
+        });
+        return_sel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (return_sel.isSelected()) {
+                    sel_pan.removeAll();
+                    sel_pan.add(return_b);
+                    sel_pan.revalidate();
+                    sel_pan.repaint();
+                }
+            }
+        });
 
 
+
+
+        // JCombobox for search by type
         searchType.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -422,30 +480,46 @@ public class deviceGUI extends Component implements ActionListener {
                 if (search_tem.equals("Model ID")) {
                     sel_pan.remove(sType_l);
                     sel_pan.remove(sType_t);
+                    sel_pan.remove(sUname_l);
+                    sel_pan.remove(sUname_t);
                     sel_pan.add(sID_t);
                     sel_pan.add(sID_l);
                     sel_pan.revalidate();
                     sel_pan.repaint();
-                } else if (search_tem.equals("Item Type")) {
+                }
+                else if (search_tem.equals("Item Type")) {
                     sel_pan.remove(sID_l);
                     sel_pan.remove(sID_t);
+                    sel_pan.remove(sUname_l);
+                    sel_pan.remove(sUname_t);
                     sel_pan.add(sType_l);
                     sel_pan.add(sType_t);
+                    sel_pan.revalidate();
+                    sel_pan.repaint();
+                }
+                else if (search_tem.equals("Username")) {
+                    sel_pan.remove(sID_l);
+                    sel_pan.remove(sID_t);
+                    sel_pan.remove(sType_l);
+                    sel_pan.remove(sType_t);
+                    sel_pan.add(sUname_l);
+                    sel_pan.add(sUname_t);
                     sel_pan.revalidate();
                     sel_pan.repaint();
                 }
             }
         });
 
-        // Panel for rental
-        JLabel tem1 = new JLabel("rental panel!");
-        tem1.setBounds(20,20,100,25);
-        rental_pan.add(tem1);
-
         // Panel for account
         JLabel tem2 = new JLabel("Account panel!");
         tem2.setBounds(50,50,100,25);
-        account_pan.add(tem2);
+        //account_pan.add(tem2);
+        user_icon = new JLabel();
+        user_icon.setBounds(80,50,150,150);
+        user_icon.setIcon(new ImageIcon("src/icons.png"));
+
+        account_pan.add(user_icon);
+        account_pan.validate();
 
 
         frame.setVisible(true);
@@ -474,11 +548,22 @@ public class deviceGUI extends Component implements ActionListener {
             System.out.println("Pressed edit button");
         }
 
+        if(e.getSource() == borrow_b) {
+            //Borrow button
+            System.out.println("Pressed borrow button");
+        }
+
+        if(e.getSource() == return_b) {
+            //return button
+            System.out.println("Pressed return button");
+        }
+
         if(e.getSource() == logout) {
             //edit button
             System.out.println("Pressed logout button");
             frame.dispose();
             JOptionPane.showMessageDialog(null, "Log out Successfully", "Log out", JOptionPane.INFORMATION_MESSAGE);
         }
+
     }
 }
