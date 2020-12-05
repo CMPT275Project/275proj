@@ -13,7 +13,7 @@ public class deviceGUI extends Component implements ActionListener {
     private static JFrame frame;
     private static JPanel main_panel, device_pan, account_pan;
     private static JPanel sel_pan, sel_pan2;
-    private static JLabel title, date, user_icon;
+    private static JLabel title, date, user_icon, userID, userType, userFN, userLN, userUN, userEmail;
     private static JLabel searchType_l, sID_l, sType_l, sUname_l, aID_l, aType_l, aDes_l,aAvail_l, aCond_l;
     private static JLabel rID_l, rType_l, rDes_l, eID_l, eType_l, eDes_l, eAvail_l, eCond_l, borrowID_l, borrowUname_l;
     private static JTextField textField1, textField2, textField3, textField4, textField5, textField6, textField7;
@@ -516,6 +516,43 @@ public class deviceGUI extends Component implements ActionListener {
         user_icon.setIcon(new ImageIcon("src/icons.png"));
         account_pan.add(user_icon);
         account_pan.validate();
+
+
+        userInfo user = new userInfo();
+
+        String temID = user.getID();
+        userID = new JLabel("Accout ID: " + temID);
+        userID.setBounds(100,200,300,35);
+        userID.setFont(new Font("DIALOG", Font.BOLD, 16));
+        String temType = user.getType();
+        userType = new JLabel("Account Type: " + temType);
+        userType.setBounds(100,250,300,35);
+        userType.setFont(new Font("DIALOG", Font.BOLD, 16));
+        String temFN = user.getFN();
+        userFN = new JLabel("First Name: " + temFN);
+        userFN.setBounds(100,300,300,35);
+        userFN.setFont(new Font("DIALOG", Font.BOLD, 16));
+        String temLN = user.getLN();
+        userLN = new JLabel("Last Name:" + temLN);
+        userLN.setBounds(100,350,300,35);
+        userLN.setFont(new Font("DIALOG", Font.BOLD, 16));
+        String temUN = user.getUserName();
+        userUN = new JLabel("Username: " + temUN);
+        userUN.setBounds(100,400,300,35);
+        userUN.setFont(new Font("DIALOG", Font.BOLD, 16));
+        String temEmail = user.getEmail();
+        userEmail = new JLabel("Email:" + temEmail);
+        userEmail.setBounds(100,450,300,35);
+        userEmail.setFont(new Font("DIALOG", Font.BOLD, 16));
+
+        account_pan.add(userID);
+        account_pan.add(userType);
+        account_pan.add(userFN);
+        account_pan.add(userLN);
+        account_pan.add(userUN);
+        account_pan.add(userEmail);
+
+
 
 
         frame.setVisible(true);
