@@ -511,13 +511,9 @@ public class deviceGUI extends Component implements ActionListener {
         });
 
         // Panel for account
-        JLabel tem2 = new JLabel("Account panel!");
-        tem2.setBounds(50,50,100,25);
-        //account_pan.add(tem2);
         user_icon = new JLabel();
         user_icon.setBounds(80,50,150,150);
         user_icon.setIcon(new ImageIcon("src/icons.png"));
-
         account_pan.add(user_icon);
         account_pan.validate();
 
@@ -526,6 +522,7 @@ public class deviceGUI extends Component implements ActionListener {
         //frame.dispose();
     }
 
+    // Action after button *************
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == search_b) {
