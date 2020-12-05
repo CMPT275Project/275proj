@@ -41,7 +41,7 @@ public class deviceGUI extends Component implements ActionListener {
         frame.add(title);
 
         tp = new JTabbedPane(JTabbedPane.TOP);
-        tp.setBounds(50,100,900,600);
+        tp.setBounds(50,80,900,650);
         Font font = new Font("DIALOG", Font.CENTER_BASELINE, 20);
         tp.setFont(font);
         device_pan = new JPanel();
@@ -54,8 +54,6 @@ public class deviceGUI extends Component implements ActionListener {
         tp.addTab("Device",device_pan);
         tp.addTab("Rental", rental_pan);
         tp.addTab("Account", account_pan);
-       
-        
         frame.add(tp);
 
         // Panel for device
@@ -63,7 +61,6 @@ public class deviceGUI extends Component implements ActionListener {
         user_label.setFont(new Font("DIALOG", Font.BOLD, 15));
         user_label.setBounds(50, 50, 350, 40);
         device_pan.add(user_label);
-
 
         String[] col = {"Name", "ID", "email","Name", "ID", "email","Name", "ID", "email"};
         String[][] row = {{"hifref", "001", "a@gmail.com","hifref", "001", "a@gmail.com","hifref", "001", "a@gmail.com"} , 
@@ -75,10 +72,6 @@ public class deviceGUI extends Component implements ActionListener {
         				  {"ferwgr", "002", "ppp","jjdwedw", "002", "ppp","jjdwedw", "002", "ppp"},
         				  {"ferwgr", "002", "ppp","jjdwedw", "002", "ppp","jjdwedw", "002", "ppp"}};
 
-
-        // not working
-//        DefaultTableModel model = new DefaultTableModel();
-//        device_table = new JTable(row,col);
         device_table = new JTable();
         device_table.setEnabled(false);
         device_table.setModel(new DefaultTableModel(row,col) {
@@ -91,21 +84,18 @@ public class deviceGUI extends Component implements ActionListener {
 		});
         
         JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(50,100,700,300);
+		scrollPane.setBounds(100,300,700,250);
 		scrollPane.setViewportView(device_table);
 		device_pan.add(scrollPane);
-        //scroll_pane = new JScrollPane(device_pan);
-        //scroll_pane.setVisible(true);
 
-
+		//??
         device_table.setPreferredScrollableViewportSize(new Dimension(100,200));
         device_table.setBounds(400,50,450,50);
         device_table.setFillsViewportHeight(true);
-        device_table.setRowHeight(72);
+        device_table.setRowHeight(35);
         device_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         device_table.setAutoCreateRowSorter(true);
-
-        //frame.add(device_table);
+        device_table.setRowSelectionAllowed(true);
 
 
         // Panel for rental
