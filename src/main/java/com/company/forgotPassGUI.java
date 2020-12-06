@@ -59,7 +59,7 @@ public class forgotPassGUI extends Component implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        registerController reg = new registerController();
+        forgotPassController reg = new forgotPassController();
         if(e.getSource() == submit){
             String uname_tem = uname_t.getText();
             if (!reg.checkUname(uname_tem)) {
@@ -68,6 +68,8 @@ public class forgotPassGUI extends Component implements ActionListener {
             else {
                 //send the email with password
                 System.out.println("exist (Fpass)");
+                String result = reg.sendPwdInEmail(uname_tem);
+                System.out.println(result);
             }
         }
     }

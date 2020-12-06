@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
     public static void main(String[] args) {
@@ -43,8 +47,18 @@ public class Main {
         //loginGUI login_win = new loginGUI();
         //login_win.loginWindow();
         deviceGUI de = new deviceGUI();
-        de.deviceWindow();
+        de.deviceWindow("aaa", "Admin");
 
+        String date = "29/02/2017";
+        String DATE_FORMAT = "dd/MM/yyyy";
+        try {
+            DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+            df.setLenient(false);
+            df.parse(date);
+            System.out.println("yess");
+        } catch (ParseException e) {
+            System.out.println("NOOOO");
+        }
     }
 
 

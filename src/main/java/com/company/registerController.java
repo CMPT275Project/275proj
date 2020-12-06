@@ -1,6 +1,7 @@
 package com.company;
 
 import java.sql.*;
+
 import org.apache.commons.validator.routines.EmailValidator;
 
 
@@ -25,9 +26,7 @@ public class registerController {
 
 
     //add new user registration info
-    //take 6 PARAMETERS, output a String result;
-    //if username exist, result = UNExist;
-    //if username NOT exist, then will add the new user and apply update checking;
+    //it will add the new user and apply update checking;
     //if any update checking is false, result = IDUpdWrong / FNUpdWrong / lNUpdWrong / roleTypeUpdWrong / emailUpdWrong / pwdUpdWrong;
     //if all update checking is true, result = addSuccess;
     public String addUserInfo(int id, String username, String firstName, String lastName, String roleType, String email, String password)
@@ -35,60 +34,41 @@ public class registerController {
         stmt = null;
         con = null;
         String check = "";
-        boolean checkUNExist = false;
         try {
             connectDB();
             stmt = con.createStatement();
-            String sql = "SELECT * FROM userLogin WHERE username ='"+username+"'";
-            ResultSet rsId = stmt.executeQuery(sql);
-            if (rsId.next()) {
-                String USERNAME = rsId.getString("username");
-                if (username.equals(USERNAME)) {
-                    checkUNExist = true;
-                    rsId.close();
-                    stmt.close();
-                    con.close();
-                    return check = "UNExist";
-                }
-            } else {
-                checkUNExist = false;
-            }
-            if (!checkUNExist) {
-                rsId.close();
-                //insert into new info
-                String sql2 = "INSERT INTO userLogin VALUES('" + id + "','"+username+"','" + firstName + "','" + lastName + "', '" + roleType + "', '" + email + "', '" + password + "')";
-                stmt.executeUpdate(sql2);
-                stmt.close();
-                con.close();
-
-                //apply checking update
-                if(checkID(username, "id", id))
-                    checkIDUpdate = true;
-                else
-                    return check = "IDUpdWrong";
-                if(checkOneItem(username, "firstName", firstName))
-                    checkFNUpdate = true;
-                else
-                    return check = "FNUpdWrong";
-                if(checkOneItem(username, "lastName", lastName))
-                    checkLNUpdate = true;
-                else
-                    return check = "lNUpdWrong";
-                if(checkOneItem(username, "roleType", roleType))
-                    checkTypeUpdate = true;
-                else
-                    return check = "roleTypeUpdWrong";
-                if(checkOneItem(username, "email", email))
-                    checkEmailUpdate = true;
-                else
-                    return check = "emailUpdWrong";
-                if(checkOneItem(username, "password", password))
-                    checkPwdUpdate = true;
-                else
-                    return check = "pwdUpdWrong";
-                if(checkIDUpdate && checkFNUpdate && checkLNUpdate && checkTypeUpdate && checkEmailUpdate && checkPwdUpdate)
-                    return check = "addSuccess";
-            }
+            //insert into new info
+            String sql = "INSERT INTO userLogin VALUES('" + id + "','"+username+"','" + firstName + "','" + lastName + "', '" + roleType + "', '" + email + "', '" + password + "')";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            con.close();
+            //apply checking update
+            if(checkID(username, "id", id))
+                checkIDUpdate = true;
+            else
+                return check = "IDUpdWrong";
+            if(checkOneItem(username, "firstName", firstName))
+                checkFNUpdate = true;
+            else
+                return check = "FNUpdWrong";
+            if(checkOneItem(username, "lastName", lastName))
+                checkLNUpdate = true;
+            else
+                return check = "lNUpdWrong";
+            if(checkOneItem(username, "roleType", roleType))
+                checkTypeUpdate = true;
+            else
+                return check = "roleTypeUpdWrong";
+            if(checkOneItem(username, "email", email))
+                checkEmailUpdate = true;
+            else
+                return check = "emailUpdWrong";
+            if(checkOneItem(username, "password", password))
+                checkPwdUpdate = true;
+            else
+                return check = "pwdUpdWrong";
+            if(checkIDUpdate && checkFNUpdate && checkLNUpdate && checkTypeUpdate && checkEmailUpdate && checkPwdUpdate)
+                return check = "addSuccess";
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -282,6 +262,15 @@ public class registerController {
     }
 
 
+    //send pwd to user by email if user forgot the pwd
+    //if email sending is failed, result = emailSendFailed;
+    //if email sending is success, result = emailSendSuccess;
+    public static void sendTestEmail(String email)
+    {
+
+
+    }
+
     //--------------------check inputs FORMAT validation---------------------------
     //check if id format is valid, can only be number, returns a boolean result
     public boolean IDValidator(String id)
@@ -400,26 +389,26 @@ public class registerController {
     }
 
     //check if password is Valid, returns a String result
-    //if pwd length is NOT in range, result = lengthWrong;
-    //if contains SPACE, result = spaceWrong;
-    //if contains invalid character, result = characterWrong;
-    //if a valid pwd, result = passwordGood;
+    //if pwd length is NOT in range, result = false;
+    //if contains SPACE, result = false;
+    //if contains invalid character, result = false;
+    //if a valid pwd, result = true;
     //should NOT contain special characters !#$%&'*+-/=?^_`{|}~;
     //NO SPACE included;
-    public String passwordValidator(String password)
+    public boolean passwordValidator(String password)
     {
-        String checkResult = "";
+        boolean checkResult = false;
         boolean check = true;
         // for checking if password length is between 8 and 15
-        if (!((password.length() >= 8) && (password.length() <= 15)) && check)
+        if (!((password.length() >= 6) && (password.length() <= 15)) && check)
         {
-            checkResult = "lengthWrong";
+            checkResult = false;
             check = false;
         }
         // to check space
         else if (password.contains(" ") && check)
         {
-            checkResult = "spaceWrong";
+            checkResult = false;
             check = false;
         }
         // for special characters
@@ -435,10 +424,10 @@ public class registerController {
                 || password.contains(">") || password.contains("?")
                 || password.contains("|") || password.contains("'")) && check)
         {
-            checkResult = "characterWrong";
+            checkResult = false;
         }
         else
-            checkResult = "passwordGood";
+            checkResult = true;
         return checkResult;
     }
 
@@ -457,4 +446,3 @@ public class registerController {
         }
     }
 }
-

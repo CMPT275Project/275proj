@@ -26,21 +26,20 @@ public class deviceGUI extends Component implements ActionListener {
     private static JComboBox searchType, aAvail_t, aCond_t, eAvail_t, eCond_t;
     private static JButton search_b, add_b, remove_b, edit_b, borrow_b, return_b, logout;
 
-    public void deviceWindow() {
+    public void deviceWindow(String username, String roleType) {
         //Getting the account type from Login
-        loginGUI temp = new loginGUI();
-        String actype = temp.getType();
-
+        String actype = roleType;
+        String UN = username;
         frame = new JFrame("Main Page - " + actype);
         frame.setSize(1000, 850);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
 
-        title = new JLabel("Laboratory Inventory System");
+        title = new JLabel("Laboratory Device Inventory System");
         title.setForeground(new Color(0, 100, 200));
         title.setFont(new Font("DIALOG", Font.BOLD, 24));
-        title.setBounds(300, 30, 350, 40);
+        title.setBounds(300, 30, 450, 40);
         frame.add(title);
 
         tp = new JTabbedPane(JTabbedPane.TOP);
@@ -68,17 +67,6 @@ public class deviceGUI extends Component implements ActionListener {
         logout.addActionListener(this);
         frame.add(logout);
 
-
-        // Panel for device
-
-        String[] col = {"Model ID", "Type", "Description","Availability", "Reserve", "Expiry Date ","Condition"};
-        String[][] row = {{"r001", "resistor", "100 ohms","yes", "NA", "NA","good"} ,
-                {"r001", "resistor", "100 ohms","yes", "NA", "NA","good"},
-                {"r003", "resistor", "100 ohms","yes", "NA", "NA","good"},
-                {"r005", "resistor", "500 ohms","No", "chinhow", "12/8/2020","good"},
-                {"r006", "resistor", "500 ohms","yes", "NA", "NA","fair"},
-                {"b001", "Bread Board", "Brand A","yes", "NA", "NA","good"},
-                {"b002", "Bread Board", "Brand B (Broken)","No", "NA", "NA","poor"}};
 
         JLabel sel_info = new JLabel("You have selected:");
         sel_info.setBounds(50,300,200,25);
@@ -121,14 +109,18 @@ public class deviceGUI extends Component implements ActionListener {
         device_pan.add(textField6);
         device_pan.add(textField7);
 
-
+        //------------------------------------------------------
+        // get table
+        deviceController table = new deviceController();
+        table.setRowNum();
+        addJtable(table.showTable());
+        /*
         // Jtable Setup
         device_table = new JTable();
         device_table.setEnabled(true);
-        device_table.setModel(new DefaultTableModel(row,col) {
-            boolean[] columnEditables = new boolean[] {
-                    false, false, false, false, false, false, false
-            };
+        device_table.setModel(new DefaultTableModel(row,col)
+        {
+            boolean[] columnEditables = new boolean[] {false, false, false, false, false, false, false};
             public boolean isCellEditable(int row, int column) {
                 return columnEditables[column];
             }
@@ -173,6 +165,7 @@ public class deviceGUI extends Component implements ActionListener {
                     }
                 }
         );
+         */
 
         JLabel opt_info = new JLabel("Please select one of the following options:");
         opt_info.setBounds(50,10,300,25);
@@ -519,7 +512,7 @@ public class deviceGUI extends Component implements ActionListener {
 
 
         userInfo user = new userInfo();
-
+        user.setInfo(UN);
         String temID = user.getID();
         userID = new JLabel("Accout ID: " + temID);
         userID.setBounds(100,200,300,35);
@@ -552,11 +545,73 @@ public class deviceGUI extends Component implements ActionListener {
         account_pan.add(userUN);
         account_pan.add(userEmail);
 
-
-
-
         frame.setVisible(true);
         //frame.dispose();
+    }
+
+    public void disapleTable()
+    {
+        this.device_pan.remove(this.scrollPane);
+    }
+
+    public void addJtable(String[][] newJTABLE)
+    {
+        // Panel for device
+        String[] col = {"Model ID", "Type", "Description","Availability", "Reserve", "Expiry Date ","Condition"};
+        //deviceController table = new deviceController();
+        //table.setRowNum();
+        String[][] row = newJTABLE;
+
+        // Jtable Setup
+        device_table = new JTable();
+        device_table.setEnabled(true);
+        device_table.setModel(new DefaultTableModel(row,col)
+        {
+            boolean[] columnEditables = new boolean[] {false, false, false, false, false, false, false};
+            public boolean isCellEditable(int row, int column) {
+                return columnEditables[column];
+            }
+        });
+        scrollPane = new JScrollPane();
+        scrollPane.setBounds(50,380,620,250);
+        scrollPane.setViewportView(device_table);
+        device_pan.add(scrollPane);
+        device_table.setPreferredScrollableViewportSize(new Dimension(100,200));
+        device_table.setBounds(400,50,700,50);
+        device_table.setFillsViewportHeight(true);
+        device_table.setRowHeight(40);
+        device_table.getColumnModel().getColumn(2).setPreferredWidth(150);//change column size
+        device_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //device_table.setAutoCreateRowSorter(true); // this will cause the selection problem
+        device_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // For table row selection (device page)
+        device_table.getSelectionModel().addListSelectionListener(
+                new ListSelectionListener() {
+                    public void valueChanged(ListSelectionEvent event) {
+
+                        DefaultTableModel model = (DefaultTableModel)device_table.getModel();
+                        int selectedRowIndex = device_table.getSelectedRow();
+                        textField1.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
+                        textField2.setText(String.format(model.getValueAt(selectedRowIndex,1).toString()));
+                        textField3.setText(String.format(model.getValueAt(selectedRowIndex,2).toString()));
+                        textField4.setText(String.format(model.getValueAt(selectedRowIndex,3).toString()));
+                        textField5.setText(String.format(model.getValueAt(selectedRowIndex,4).toString()));
+                        textField6.setText(String.format(model.getValueAt(selectedRowIndex,5).toString()));
+                        textField7.setText(String.format(model.getValueAt(selectedRowIndex,6).toString()));
+
+                        rID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
+                        rType_t.setText(String.format(model.getValueAt(selectedRowIndex,1).toString()));
+                        rDes_t.setText(String.format(model.getValueAt(selectedRowIndex,2).toString()));
+
+                        eID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
+                        eType_t.setText(String.format(model.getValueAt(selectedRowIndex,1).toString()));
+                        eDes_t.setText(String.format(model.getValueAt(selectedRowIndex,2).toString()));
+
+                        borrowID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
+                    }
+                }
+        );
     }
 
     // Action after button *************
@@ -564,22 +619,62 @@ public class deviceGUI extends Component implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == search_b) {
             //search button
-            System.out.println("Pressed search button");
+            String type = searchType.getSelectedItem().toString();
+            if(type == "Model ID")
+            {
+                String temp = sID_t.getText();
+                deviceController device = new deviceController();
+                String[][] table = device.searchModelID(temp);
+                disapleTable();
+                addJtable(table);
+                System.out.println(table);
+            }
+            else if(type == "Item Type")
+            {
+                String temp = sType_t.getText();
+                deviceController device = new deviceController();
+                String[][] table = device.searchType(temp);
+                disapleTable();
+                addJtable(table);
+                System.out.println(table);
+            }
+            else
+            {
+                String temp = sUname_t.getText();
+                deviceController device = new deviceController();
+                String[][] table = device.searchUsername(temp);
+                disapleTable();
+                addJtable(table);
+                System.out.println(table);
+            }
         }
 
         if(e.getSource() == add_b) {
             //add button
-            System.out.println("Pressed add button");
+            deviceController device = new deviceController();
+            int result = device.addNewDevice(aID_t.getText(), aType_t.getText(), aDes_t.getText(), aAvail_t.getSelectedItem().toString(), "NA","NA", aCond_t.getSelectedItem().toString());
+            disapleTable();
+            addJtable(device.showTable());
+            System.out.println(result);
         }
 
         if(e.getSource() == remove_b) {
             //remove button
-            System.out.println("Pressed remove button");
+            String temp = rID_t.getText().toString();
+            deviceController device = new deviceController();
+            int result = device.deleteDevice(temp);
+            disapleTable();
+            addJtable(device.showTable());
+            System.out.println(result);
         }
 
         if(e.getSource() == edit_b) {
             //edit button
-            System.out.println("Pressed edit button");
+            deviceController device = new deviceController();
+            boolean result = device.edit(eID_t.getText(), eType_t.getText(), eDes_t.getText(), eAvail_t.getSelectedItem().toString(), eCond_t.getSelectedItem().toString());
+            disapleTable();
+            addJtable(device.showTable());
+            System.out.println(result);
         }
 
         if(e.getSource() == borrow_b) {

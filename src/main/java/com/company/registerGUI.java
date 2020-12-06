@@ -137,7 +137,7 @@ public class registerGUI extends Component implements ActionListener {
             String lname_tem = lname_t.getText();
             String email_tem = email_t.getText();
             String uname_tem = uname_t.getText();
-            String pass_tem = pass_t.getText();
+            String pass_tem = pass_t.getText().toString();
             String cpass_tem = cpass_t.getText();
             String actype_tem = acctype_b.getSelectedItem().toString();
 
@@ -163,18 +163,26 @@ public class registerGUI extends Component implements ActionListener {
             if (email_tem.length() == 0) {
                 error_msg += "Invalid Email: Empty Email.\n";
             } else if (!reg.emailValidator(email_tem)) {
-                error_msg += "Invalid Email\n";
+                error_msg += "Invalid Email Format.\n";
             }
 
             if (uname_tem.length() == 0) {
                 error_msg += "Invalid Username: Empty Username.\n";
+            }
+            else if(reg.checkUname(uname_tem))
+            {
+                error_msg += "Invalid Username: Username already exists.\n";
             }
             else if (!reg.UNValidator(uname_tem)) {
                 error_msg += "Invalid Username: Only letters are allowed. No spaces.\n";
             }
 
             if (pass_tem.length() == 0) {
-                error_msg += "Invalid Username: Empty Username.\n";
+                error_msg += "Invalid Password: Empty Username.\n";
+            }
+            else if(reg.passwordValidator(pass_tem))
+            {
+                error_msg += "Invalid Password: Password should have 6 ~ 15 characters.\n No spaces.\n Only letters are allowed.\n";
             }
 
             if (!(pass_tem.equals(cpass_tem))) {
@@ -185,14 +193,22 @@ public class registerGUI extends Component implements ActionListener {
                 error_msg += "Please select the account type.\n";
             }
 
+            //if(sendTestEmail(email_tem) == false)
+            //{
+            //    error_msg += "\n";
+            //}
+
             if (!error_msg.equals("")) {
                 JOptionPane.showMessageDialog(null, error_msg, "Error", JOptionPane.ERROR_MESSAGE);
             }
             else {
                 int id_temp = Integer.parseInt(id_tem);
-                //reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
+                String result = reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
                 //JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Info", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
             }
+
+
         }
     }
 }

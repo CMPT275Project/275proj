@@ -14,7 +14,8 @@ public class loginGUI extends Component implements ActionListener {
     private static JPasswordField pass_text;
     private static JButton signin, register, fpass;
     private static JCheckBox show_pass;
-    protected String AC_type = "Admin";
+    protected String AC_type;
+    protected String Username;
 
     public void loginWindow() {
 
@@ -85,7 +86,16 @@ public class loginGUI extends Component implements ActionListener {
         //frame.dispose();
     }
     public String getType() {
-       return this.AC_type;
+        return this.AC_type;
+    }
+    public void setType(String type)
+    {
+        this.AC_type = type;
+    }
+
+    public void setUN(String username)
+    {
+        this.Username = username;
     }
 
     @Override
@@ -111,8 +121,10 @@ public class loginGUI extends Component implements ActionListener {
                 //new search win
                 frame.dispose();
                 deviceGUI device_win = new deviceGUI();
-
-                device_win.deviceWindow();
+                this.setType(login.type);
+                this.setUN(uname);
+                System.out.println("test name" + uname);
+                device_win.deviceWindow(uname, this.AC_type);
                 System.out.println("yeahhh login");
             }
             else{
