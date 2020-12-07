@@ -111,36 +111,41 @@ public class loginGUI extends Component implements ActionListener {
         }
 
         if(e.getSource() == signin){
-            String error_msg = null;
+            String error_msg = "";
             String pass = pass_text.getText();
             String uname = user_text.getText();
             loginController login = new loginController();
-            if(login.UNValidator(uname) == "spaceWrong")
-            {}
-            else if(login.UNValidator(uname) == "characterWrong")
-            {}
-            else if(login.passwordValidator(pass) == "lengthWrong")
-            {}
-            else if(login.passwordValidator(pass) == "spaceWrong")
-            {}
-            else if(login.passwordValidator(pass) == "characterWrong")
-            {}
-            else
-            {
-                System.out.println(uname);
-                System.out.println(pass);
-                if(login.checkLogin(uname, pass)){
-                    //new search win
-                    frame.dispose();
-                    deviceGUI device_win = new deviceGUI();
-                    this.setType(login.type);
-                    this.setUN(uname);
-                    System.out.println("test name" + uname);
-                    device_win.deviceWindow(uname, this.AC_type);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Incorrect Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
-                }}
+            if(login.UNValidator(uname) == "spaceWrong") {
+                error_msg += "Invalid input: Username contains spaces.\n";
+            }
+            else if(login.UNValidator(uname) == "characterWrong") {
+                error_msg += "Invalid input: Username contains special characters.\n";
+            }
+
+            if(login.passwordValidator(pass) == "lengthWrong") {
+                error_msg += "Invalid input: Password (invalid Length).\n";
+            }
+            else if(login.passwordValidator(pass) == "spaceWrong") {
+                error_msg += "Invalid input: Password contains spaces.\n";
+            }
+            else if(login.passwordValidator(pass) == "characterWrong") {
+                error_msg += "Invalid input: Password contains special characters.\n";
+            }
+
+
+            if(login.checkLogin(uname, pass) && error_msg.equals("")){
+                // Enter to the main page
+                frame.dispose();
+                deviceGUI device_win = new deviceGUI();
+                // NEED FIXes!!!!!
+                this.setType(login.type);
+                this.setUN(uname);
+                device_win.deviceWindow(uname, this.AC_type);
+            }
+            else{
+                error_msg += "Incorrect Username or Password!\n";
+                JOptionPane.showMessageDialog(null, error_msg, "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
         if(e.getSource() == register){

@@ -39,15 +39,6 @@ public class forgotPassGUI extends Component implements ActionListener {
         uname_t.setBounds(150,120,180,25);
         panel.add(uname_t);
 
-        /*email = new JLabel("Email");
-        email.setFont(new Font("DIALOG", Font.BOLD, 16));
-        email.setBounds(50,170,150,25);
-        panel.add(email);
-        email_t = new JTextField();
-        email_t.setFont(new Font("DIALOG", Font.PLAIN, 14));
-        email_t.setBounds(150,170,180,25);
-        panel.add(email_t);*/
-
         submit = new JButton("Submit");
         submit.setFont(new Font("DIALOG", Font.BOLD, 14));
         submit.setBounds(240,240,90,30);
@@ -63,13 +54,17 @@ public class forgotPassGUI extends Component implements ActionListener {
         if(e.getSource() == submit){
             String uname_tem = uname_t.getText();
             if (!reg.checkUname(uname_tem)) {
-                JOptionPane.showMessageDialog(null, "Username does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Username does not exist!", "Forgot Password", JOptionPane.ERROR_MESSAGE);
             }
             else {
                 //send the email with password
-                System.out.println("exist (Fpass)");
-                String result = reg.sendPwdInEmail(uname_tem);
-                System.out.println(result);
+                int result = reg.sendPwdInEmail(uname_tem);
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(null, "Email Sent", "Forgot Password", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else if (result == -1 || result == -2) {
+                    JOptionPane.showMessageDialog(null, "Something went wrong!", "Forgot Password", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }

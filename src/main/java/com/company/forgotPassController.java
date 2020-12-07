@@ -19,11 +19,11 @@ public class forgotPassController {
 
 
     //send pwd to user by email if user forgot the pwd
-    //if email sending is failed, result = emailSendFailed;
-    //if email sending is success, result = emailSendSuccess;
-    public static String sendPwdInEmail(String username)
+    //if email sending is failed, result = -1, -2;
+    //if email sending is success, result = 1;
+    public static int sendPwdInEmail(String username)
     {
-        String finalResult = "";
+        int finalResult = 0;
         String password = "";
         String email = "";
         Statement stmt;
@@ -45,10 +45,11 @@ public class forgotPassController {
             stmt.close();
             con.close();
         }catch (SQLException se) {
-            //Error handling for JDBC
+            finalResult = -2;
             se.printStackTrace();
         } catch (Exception e) {
             //Error handling for Class.forName
+            finalResult = -2;
             e.printStackTrace();
         }
 
@@ -73,13 +74,13 @@ public class forgotPassController {
             message.setFrom(new InternetAddress(sender));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("[Device Inventory System] - Password Reminder");
-            message.setText("Hello " + username + ", \n\n" + "Your password for log-in is: " + password +"\n" + "Please keep it safe.\n\n\n" +
+            message.setText("Hello " + username + ", \n\n" + "Your password for this account is: " + password +"\n" + "Please keep it safe.\n\n\n" +
                     "Regards,\n\n" + "Device Inventory System Team");
             Transport.send(message);
-            finalResult = "Email sent";
+            finalResult = 1;
         }
         catch (MessagingException e) {
-            finalResult = "Unable to send the email";
+            finalResult = -1;
             String a = e.getStackTrace().toString();
         }
         return finalResult;

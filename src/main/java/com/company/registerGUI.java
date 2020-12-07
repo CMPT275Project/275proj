@@ -123,11 +123,7 @@ public class registerGUI extends Component implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         // Actionlistner for combobox (drop box)
-        if(e.getSource() == acctype_b){
-            System.out.println(acctype_b.getSelectedItem());
-        }
         if(e.getSource() == close){
-            System.out.println("Close");
             frame.dispose();
         }
         if(e.getSource() == signup) {
@@ -137,7 +133,7 @@ public class registerGUI extends Component implements ActionListener {
             String lname_tem = lname_t.getText();
             String email_tem = email_t.getText();
             String uname_tem = uname_t.getText();
-            String pass_tem = pass_t.getText().toString();
+            String pass_tem = pass_t.getText();
             String cpass_tem = cpass_t.getText();
             String actype_tem = acctype_b.getSelectedItem().toString();
 
@@ -198,17 +194,18 @@ public class registerGUI extends Component implements ActionListener {
             //    error_msg += "\n";
             //}
 
+            if (error_msg.equals("") && reg.checkUname(uname_tem) == false) {
+                error_msg += "Username already exists.\n";
+            }
+
             if (!error_msg.equals("")) {
-                JOptionPane.showMessageDialog(null, error_msg, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, error_msg, "Register", JOptionPane.ERROR_MESSAGE);
             }
             else {
                 int id_temp = Integer.parseInt(id_tem);
                 String result = reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
-                //JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Info", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println(result);
+                JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Register", JOptionPane.INFORMATION_MESSAGE);
             }
-
-
         }
     }
 }
