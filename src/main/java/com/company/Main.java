@@ -44,10 +44,10 @@ public class Main {
         }
         */
 
-        loginGUI login_win = new loginGUI();
-        login_win.loginWindow();
-        //deviceGUI de = new deviceGUI();
-        //de.deviceWindow("aaa", "Admin");
+        //loginGUI login_win = new loginGUI();
+        //login_win.loginWindow();
+        deviceGUI de = new deviceGUI();
+        de.deviceWindow("aaa", "Admin");
 
         String date = "29/02/2017";
         String DATE_FORMAT = "dd/MM/yyyy";

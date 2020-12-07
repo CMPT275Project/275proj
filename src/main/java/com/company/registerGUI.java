@@ -204,6 +204,7 @@ public class registerGUI extends Component implements ActionListener {
             else {
                 int id_temp = Integer.parseInt(id_tem);
                 String result = reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
+                //need fix
                 JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Register", JOptionPane.INFORMATION_MESSAGE);
             }
         }

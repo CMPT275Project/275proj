@@ -274,7 +274,7 @@ public class deviceController
                 rs.close();
                 stmt.close();
                 con.close();
-                return null;
+                return table = null;
             }
             else
             {
@@ -328,7 +328,7 @@ public class deviceController
                 rs.close();
                 stmt.close();
                 con.close();
-                return null;
+                return table = null;
             }
             else
             {
@@ -383,7 +383,7 @@ public class deviceController
                 rs.close();
                 stmt.close();
                 con.close();
-                return null;
+                return table = null;
             }
             else
             {
@@ -416,6 +416,60 @@ public class deviceController
         return table;
     }
 
+    //borrow device
+    //output boolean result
+    public boolean borrowDevice(String modelID, String username)
+    {
+        boolean finalCheck = false;
+        stmt = null;
+        con = null;
+        try {
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "UPDATE deviceInventory SET reserve = '"+username+"' WHERE modelID = '"+modelID+"'";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            con.close();
+            if(checkOneItem(modelID, "reserve", username))
+                finalCheck = true;
+        }catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return finalCheck;
+    }
+
+    //check valid username in table
+    public boolean checkUN(String username)
+    {
+        boolean finalCheck = false;
+        stmt = null;
+        con = null;
+        try {
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "SELECT username FROM userLogin WHERE username = '"+username+"'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                String USERNAME = rs.getString(1);
+                if (username.equals(USERNAME))
+                    finalCheck = true;
+            }
+            stmt.close();
+            con.close();
+        }catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return finalCheck;
+
+    }
 
     //edit device
     public boolean edit(String modelID, String deviceType, String description, String availability, String cond)

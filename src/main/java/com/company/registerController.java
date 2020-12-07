@@ -1,8 +1,13 @@
 package com.company;
 
 import java.sql.*;
+import java.util.Properties;
 
 import org.apache.commons.validator.routines.EmailValidator;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 
 public class registerController {
@@ -265,10 +270,39 @@ public class registerController {
     //send pwd to user by email if user forgot the pwd
     //if email sending is failed, result = emailSendFailed;
     //if email sending is success, result = emailSendSuccess;
-    public static void sendTestEmail(String email)
+    public boolean sendTestEmail(String email)
     {
+        boolean finalResult = false;
 
+        String recipient = email;
+        String sender = "cmpt275proj@gmail.com";
+        String emailPwd = "275group17";
 
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getDefaultInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(sender, emailPwd);
+            }
+        });
+        try{
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(sender));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+            message.setSubject("[Device Inventory System] - Test Email");
+            message.setText("Hello" + ", \n\n" + "This is only a TEST email.\n" + "Thank you so much and have a nice day.\n\n\n" +
+                    "Regards,\n\n" + "Device Inventory System Team");
+            Transport.send(message);
+            return finalResult = true;
+        }
+        catch (MessagingException e) {
+            return finalResult = false;
+        }
     }
 
     //--------------------check inputs FORMAT validation---------------------------
