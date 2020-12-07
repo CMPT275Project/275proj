@@ -15,16 +15,16 @@ public class deviceGUI extends Component implements ActionListener {
     private static JPanel sel_pan, sel_pan2;
     private static JLabel title, date, user_icon, userID, userType, userFN, userLN, userUN, userEmail;
     private static JLabel searchType_l, sID_l, sType_l, sUname_l, aID_l, aType_l, aDes_l,aAvail_l, aCond_l;
-    private static JLabel rID_l, rType_l, rDes_l, eID_l, eType_l, eDes_l, eAvail_l, eCond_l, borrowID_l, borrowUname_l;
+    private static JLabel rID_l, rType_l, rDes_l, eID_l, eType_l, eDes_l, eAvail_l, eCond_l, borrowID_l, borrowUname_l, bDate_l;
     private static JTextField textField1, textField2, textField3, textField4, textField5, textField6, textField7;
     private static JTextField sID_t, sType_t, sUname_t, aID_t, aType_t, aDes_t;
-    private static JTextField rID_t, rType_t, rDes_t, eID_t, eType_t, eDes_t, borrowID_t ,borrowUname_t;
+    private static JTextField rID_t, rType_t, rDes_t, eID_t, eType_t, eDes_t, borrowID_t ,borrowUname_t, bDate_t;
     private static JTabbedPane tp;
     private static JTable device_table;
     private static JScrollPane scrollPane;
     private static JRadioButton search_sel, add_sel, remove_sel, edit_sel, borrow_sel, return_sel;
     private static JComboBox searchType, aAvail_t, aCond_t, eAvail_t, eCond_t;
-    private static JButton search_b, add_b, remove_b, edit_b, borrow_b, return_b, logout;
+    private static JButton search_b, add_b, remove_b, edit_b, borrow_b, return_b, logout, show_tb, rClear_b, eClear_b, bClear_b;
 
     public void deviceWindow(String username, String roleType) {
         //Getting the account type from Login
@@ -74,31 +74,31 @@ public class deviceGUI extends Component implements ActionListener {
 
         textField1 = new JTextField();
         textField1.setBounds(50,330,80,25);
-        textField1.setFont(new Font("DIALOG", Font.BOLD, 12));
+        textField1.setFont(new Font("DIALOG", Font.BOLD, 10));
         textField1.setEditable(false);
         textField2 = new JTextField();
         textField2.setBounds(130,330,70,25);
-        textField2.setFont(new Font("DIALOG", Font.BOLD, 12));
+        textField2.setFont(new Font("DIALOG", Font.BOLD, 10));
         textField2.setEditable(false);
         textField3 = new JTextField();
         textField3.setBounds(200,330,150,25);
-        textField3.setFont(new Font("DIALOG", Font.BOLD, 12));
+        textField3.setFont(new Font("DIALOG", Font.BOLD, 10));
         textField3.setEditable(false);
         textField4 = new JTextField();
         textField4.setBounds(350,330,80,25);
-        textField4.setFont(new Font("DIALOG", Font.BOLD, 12));
+        textField4.setFont(new Font("DIALOG", Font.BOLD, 10));
         textField4.setEditable(false);
         textField5 = new JTextField();
         textField5.setBounds(430,330,70,25);
-        textField5.setFont(new Font("DIALOG", Font.BOLD, 12));
+        textField5.setFont(new Font("DIALOG", Font.BOLD, 10));
         textField5.setEditable(false);
         textField6 = new JTextField();
         textField6.setBounds(500,330,80,25);
-        textField6.setFont(new Font("DIALOG", Font.BOLD, 12));
+        textField6.setFont(new Font("DIALOG", Font.BOLD, 10));
         textField6.setEditable(false);
         textField7 = new JTextField();
         textField7.setBounds(580,330,70,25);
-        textField7.setFont(new Font("DIALOG", Font.BOLD, 12));
+        textField7.setFont(new Font("DIALOG", Font.BOLD, 10));
         textField7.setEditable(false);
         device_pan.add(sel_info);
         device_pan.add(textField1);
@@ -200,7 +200,7 @@ public class deviceGUI extends Component implements ActionListener {
         borrow_sel.setBounds(500, 40, 100,35);
         borrow_sel.setFont(new Font("DIALOG", Font.BOLD, 14));
         device_pan.add(borrow_sel);
-        return_sel = new JRadioButton("Rental");
+        return_sel = new JRadioButton("Return");
         return_sel.setBounds(600, 40, 100,35);
         return_sel.setFont(new Font("DIALOG", Font.BOLD, 14));
         device_pan.add(return_sel);
@@ -213,6 +213,16 @@ public class deviceGUI extends Component implements ActionListener {
         bg.add(edit_sel);
         bg.add(borrow_sel);
         bg.add(return_sel);
+
+        //Button for refresh the table
+        show_tb = new JButton("Show All");
+        show_tb.setBounds(700,380,100,30);
+        device_pan.add(show_tb);
+        show_tb.addActionListener(this);
+        JTextArea show_info = new JTextArea("Please use the (Show All) button \nto refresh the table");
+        show_info.setBounds(700,420,190,50);
+        show_info.setBackground(new Color(224, 224, 224));
+        device_pan.add(show_info);
 
         // Component for search
         searchType_l = new JLabel("Search By");
@@ -297,11 +307,16 @@ public class deviceGUI extends Component implements ActionListener {
         remove_b.setBounds(150,150,80,30);
         remove_b.setFont(new Font("DIALOG", Font.BOLD, 12));
         remove_b.addActionListener(this);
+        rClear_b = new JButton("Clear");
+        rClear_b.setBounds(40,150,70,30);
+        rClear_b.setFont(new Font("DIALOG", Font.BOLD, 12));
+        rClear_b.addActionListener(this);
+
 
 
         // Components for edit
-        JTextArea edit_info = new JTextArea("Note: Please remove and add the item \nif you would like to change the Model ID or Item Type");
-        edit_info.setBounds(10,150,300,35);
+        JTextArea edit_info = new JTextArea("Note: \n1. Please select the item from the table below.\n2. Please remove and add the item \nif you would like to change the Model ID or Item Type");
+        edit_info.setBounds(10,150,300,50);
         edit_info.setBackground(new Color(224, 224, 224));
         eID_l = new JLabel("Model ID");
         eID_l.setBounds(10,20,100,25);
@@ -333,6 +348,11 @@ public class deviceGUI extends Component implements ActionListener {
         edit_b.setBounds(400,140,80,30);
         edit_b.setFont(new Font("DIALOG", Font.BOLD, 13));
         edit_b.addActionListener(this);
+        eClear_b = new JButton("Clear");
+        eClear_b.setBounds(400,100,80,30);
+        eClear_b.setFont(new Font("DIALOG", Font.BOLD, 12));
+        eClear_b.addActionListener(this);
+
 
         // Component for Borrow
         JLabel borrow_info = new JLabel("Note: Please select the item from the table below.");
@@ -352,6 +372,16 @@ public class deviceGUI extends Component implements ActionListener {
         borrow_b.setBounds(390,140,90,30);
         borrow_b.setFont(new Font("DIALOG", Font.BOLD, 13));
         borrow_b.addActionListener(this);
+        bDate_l = new JLabel("Expiry Date");
+        bDate_l.setBounds(10,100,100,25);
+        bDate_t = new JTextField();
+        bDate_t.setBounds(100,100,130,25);
+        bClear_b = new JButton("Clear");
+        bClear_b.setBounds(300,140,70,30);
+        bClear_b.addActionListener(this);
+        JLabel dateInfo = new JLabel("(dd/mm/yyyy)");
+        dateInfo.setBounds(100,125,130,25);
+
 
         // Component for Return
         return_b = new JButton("Return");
@@ -407,6 +437,7 @@ public class deviceGUI extends Component implements ActionListener {
                     sel_pan.add(rDes_l);
                     sel_pan.add(rDes_t);
                     sel_pan.add(remove_b);
+                    sel_pan.add(rClear_b);
                     sel_pan.revalidate();
                     sel_pan.repaint();
                 }
@@ -429,6 +460,7 @@ public class deviceGUI extends Component implements ActionListener {
                     sel_pan.add(eCond_l);
                     sel_pan.add(eCond_t);
                     sel_pan.add(edit_b);
+                    sel_pan.add(eClear_b);
                     sel_pan.revalidate();
                     sel_pan.repaint();
                 }
@@ -445,6 +477,10 @@ public class deviceGUI extends Component implements ActionListener {
                     sel_pan.add(borrowUname_l);
                     sel_pan.add(borrowUname_t);
                     sel_pan.add(borrow_b);
+                    sel_pan.add(bClear_b);
+                    sel_pan.add(bDate_l);
+                    sel_pan.add(bDate_t);
+                    sel_pan.add(dateInfo);
                     sel_pan.revalidate();
                     sel_pan.repaint();
                 }
@@ -617,45 +653,86 @@ public class deviceGUI extends Component implements ActionListener {
     // Action after button *************
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == show_tb) {
+            deviceController device = new deviceController();
+            String[][] table = device.showTable();
+            disapleTable();
+            addJtable(table);
+        }
+
         if(e.getSource() == search_b) {
             //search button
             String type = searchType.getSelectedItem().toString();
+            deviceController device = new deviceController();
+            String err = "";
             if(type == "Model ID")
             {
                 String temp = sID_t.getText();
-                deviceController device = new deviceController();
+                if (device.inputValidator(temp) == false) {
+                    err += "Invalid Input: Contains special characters.\n";
+                    JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                }
                 String[][] table = device.searchModelID(temp);
+                if (table == null && err == "") {
+                    JOptionPane.showMessageDialog(null, "Model ID does not exist!", "Search", JOptionPane.ERROR_MESSAGE);
+                }
                 disapleTable();
                 addJtable(table);
-                System.out.println(table);
             }
             else if(type == "Item Type")
             {
                 String temp = sType_t.getText();
-                deviceController device = new deviceController();
+                if (device.inputValidator(temp) == false) {
+                    err += "Invalid Input: Contains special characters.\n";
+                    JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                }
                 String[][] table = device.searchType(temp);
                 disapleTable();
                 addJtable(table);
-                System.out.println(table);
             }
-            else
+            else if (type == "Username")
             {
                 String temp = sUname_t.getText();
-                deviceController device = new deviceController();
+                if (device.inputValidator(temp) == false) {
+                    err += "Invalid Input: Contains special characters.\n";
+                    JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                }
                 String[][] table = device.searchUsername(temp);
+                if (table == null && err == null) {
+                    JOptionPane.showMessageDialog(null, "Username does not exist!", "Search", JOptionPane.ERROR_MESSAGE);
+                }
                 disapleTable();
                 addJtable(table);
-                System.out.println(table);
             }
         }
 
         if(e.getSource() == add_b) {
             //add button
             deviceController device = new deviceController();
-            int result = device.addNewDevice(aID_t.getText(), aType_t.getText(), aDes_t.getText(), aAvail_t.getSelectedItem().toString(), "NA","NA", aCond_t.getSelectedItem().toString());
+            if (aID_t.getText().length() == 0 || aType_t.getText().length() == 0  || aDes_t.getText().length() == 0) {
+                JOptionPane.showMessageDialog(null, "Error: inputs can not be empty!", "Add", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                if (device.inputValidator(aID_t.getText()) == false || device.inputValidator(aType_t.getText()) == false || device.inputValidator(aDes_t.getText()) == false) {
+                    JOptionPane.showMessageDialog(null, "Invalid Input: Contains special characters.", "Add", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    int result = device.addNewDevice(aID_t.getText(), aType_t.getText(), aDes_t.getText(), aAvail_t.getSelectedItem().toString(), "NA","NA", aCond_t.getSelectedItem().toString());
+                    if (result == 2) {
+                        JOptionPane.showMessageDialog(null, "Model ID already exits!", "Add", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else if (result  == -1 || result == 0) {
+                        JOptionPane.showMessageDialog(null, "Unable to add the device!", "Add", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else if (result == 1){
+                        JOptionPane.showMessageDialog(null, "Device Added!", "Add", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+
+
             disapleTable();
             addJtable(device.showTable());
-            System.out.println(result);
         }
 
         if(e.getSource() == remove_b) {
@@ -663,20 +740,36 @@ public class deviceGUI extends Component implements ActionListener {
             String temp = rID_t.getText().toString();
             deviceController device = new deviceController();
             int result = device.deleteDevice(temp);
+            if (result  == -1 || result == 0 ) {
+                JOptionPane.showMessageDialog(null, "Unable to delete the device!", "Remove", JOptionPane.ERROR_MESSAGE);
+            }
+            else if (result == 1){
+                JOptionPane.showMessageDialog(null, "Device Deleted!", "Remove", JOptionPane.INFORMATION_MESSAGE);
+            }
             disapleTable();
             addJtable(device.showTable());
-            System.out.println(result);
         }
 
         if(e.getSource() == edit_b) {
             //edit button
             deviceController device = new deviceController();
             boolean result = device.edit(eID_t.getText(), eType_t.getText(), eDes_t.getText(), eAvail_t.getSelectedItem().toString(), eCond_t.getSelectedItem().toString());
+            if (device.inputValidator(eDes_t.getText()) == false ) {
+                JOptionPane.showMessageDialog(null, "Invalid Input: Contains special characters.", "Edit", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                if (result == false) {
+                    JOptionPane.showMessageDialog(null, "Unable to delete the device!", "Edit", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Device Edited!", "Edit", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
             disapleTable();
             addJtable(device.showTable());
-            System.out.println(result);
         }
 
+        // this point
         if(e.getSource() == borrow_b) {
             //Borrow button
             System.out.println("Pressed borrow button");
@@ -685,6 +778,24 @@ public class deviceGUI extends Component implements ActionListener {
         if(e.getSource() == return_b) {
             //return button
             System.out.println("Pressed return button");
+        }
+
+        if(e.getSource() == rClear_b) {
+            rID_t.setText("");
+            rType_t.setText("");
+            rDes_t.setText("");
+        }
+
+        if(e.getSource() == eClear_b) {
+            eID_t.setText("");
+            eType_t.setText("");
+            eDes_t.setText("");
+        }
+
+        if(e.getSource() == bClear_b) {
+            borrowID_t.setText("");
+            borrowUname_t.setText("");
+            bDate_t.setText("");
         }
 
         if(e.getSource() == logout) {

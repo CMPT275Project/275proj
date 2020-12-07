@@ -115,21 +115,32 @@ public class loginGUI extends Component implements ActionListener {
             String pass = pass_text.getText();
             String uname = user_text.getText();
             loginController login = new loginController();
-            System.out.println(uname);
-            System.out.println(pass);
-            if(login.checkLogin(uname, pass)){
-                //new search win
-                frame.dispose();
-                deviceGUI device_win = new deviceGUI();
-                this.setType(login.type);
-                this.setUN(uname);
-                System.out.println("test name" + uname);
-                device_win.deviceWindow(uname, this.AC_type);
-                System.out.println("yeahhh login");
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "Incorrect Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            if(login.UNValidator(uname) == "spaceWrong")
+            {}
+            else if(login.UNValidator(uname) == "characterWrong")
+            {}
+            else if(login.passwordValidator(pass) == "lengthWrong")
+            {}
+            else if(login.passwordValidator(pass) == "spaceWrong")
+            {}
+            else if(login.passwordValidator(pass) == "characterWrong")
+            {}
+            else
+            {
+                System.out.println(uname);
+                System.out.println(pass);
+                if(login.checkLogin(uname, pass)){
+                    //new search win
+                    frame.dispose();
+                    deviceGUI device_win = new deviceGUI();
+                    this.setType(login.type);
+                    this.setUN(uname);
+                    System.out.println("test name" + uname);
+                    device_win.deviceWindow(uname, this.AC_type);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Incorrect Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
+                }}
         }
 
         if(e.getSource() == register){
@@ -140,7 +151,6 @@ public class loginGUI extends Component implements ActionListener {
         if(e.getSource() == fpass){
             forgotPassGUI fpass_win = new forgotPassGUI();
             fpass_win.fpassWindow();
-
         }
 
     }

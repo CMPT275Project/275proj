@@ -274,7 +274,7 @@ public class deviceController
                 rs.close();
                 stmt.close();
                 con.close();
-                return table;
+                return null;
             }
             else
             {
@@ -328,7 +328,7 @@ public class deviceController
                 rs.close();
                 stmt.close();
                 con.close();
-                return table;
+                return null;
             }
             else
             {
@@ -383,7 +383,7 @@ public class deviceController
                 rs.close();
                 stmt.close();
                 con.close();
-                return table;
+                return null;
             }
             else
             {
@@ -457,7 +457,7 @@ public class deviceController
         return finalCheck;
     }
 
-    public boolean passwordValidator(String password)
+    public boolean inputValidator(String password)
     {
         boolean checkResult = false;
         boolean check = true;
