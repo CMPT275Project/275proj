@@ -25,11 +25,15 @@ public class deviceGUI extends Component implements ActionListener {
     private static JRadioButton search_sel, add_sel, remove_sel, edit_sel, borrow_sel, return_sel;
     private static JComboBox searchType, aAvail_t, aCond_t, eAvail_t, eCond_t;
     private static JButton search_b, add_b, remove_b, edit_b, borrow_b, return_b, logout, show_tb, rClear_b, eClear_b, bClear_b;
+    public String username;
+    public void setUN(String UN){this.username = UN;}
+    public String getUN(){return this.username;}
 
     public void deviceWindow(String username, String roleType) {
         //Getting the account type from Login
         String actype = roleType;
         String UN = username;
+        setUN(username);
         frame = new JFrame("Main Page - " + actype);
         frame.setSize(1000, 850);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,63 +113,10 @@ public class deviceGUI extends Component implements ActionListener {
         device_pan.add(textField6);
         device_pan.add(textField7);
 
-        //------------------------------------------------------
-        // get table
+        //get table
         deviceController table = new deviceController();
         table.setRowNum();
         addJtable(table.showTable());
-        /*
-        // Jtable Setup
-        device_table = new JTable();
-        device_table.setEnabled(true);
-        device_table.setModel(new DefaultTableModel(row,col)
-        {
-            boolean[] columnEditables = new boolean[] {false, false, false, false, false, false, false};
-            public boolean isCellEditable(int row, int column) {
-                return columnEditables[column];
-            }
-        });
-        scrollPane = new JScrollPane();
-        scrollPane.setBounds(50,380,620,250);
-        scrollPane.setViewportView(device_table);
-        device_pan.add(scrollPane);
-        device_table.setPreferredScrollableViewportSize(new Dimension(100,200));
-        device_table.setBounds(400,50,700,50);
-        device_table.setFillsViewportHeight(true);
-        device_table.setRowHeight(40);
-        device_table.getColumnModel().getColumn(2).setPreferredWidth(150);//change column size
-        device_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        //device_table.setAutoCreateRowSorter(true); // this will cause the selection problem
-        device_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        // For table row selection (device page)
-        device_table.getSelectionModel().addListSelectionListener(
-                new ListSelectionListener() {
-                    public void valueChanged(ListSelectionEvent event) {
-
-                        DefaultTableModel model = (DefaultTableModel)device_table.getModel();
-                        int selectedRowIndex = device_table.getSelectedRow();
-                        textField1.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
-                        textField2.setText(String.format(model.getValueAt(selectedRowIndex,1).toString()));
-                        textField3.setText(String.format(model.getValueAt(selectedRowIndex,2).toString()));
-                        textField4.setText(String.format(model.getValueAt(selectedRowIndex,3).toString()));
-                        textField5.setText(String.format(model.getValueAt(selectedRowIndex,4).toString()));
-                        textField6.setText(String.format(model.getValueAt(selectedRowIndex,5).toString()));
-                        textField7.setText(String.format(model.getValueAt(selectedRowIndex,6).toString()));
-
-                        rID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
-                        rType_t.setText(String.format(model.getValueAt(selectedRowIndex,1).toString()));
-                        rDes_t.setText(String.format(model.getValueAt(selectedRowIndex,2).toString()));
-
-                        eID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
-                        eType_t.setText(String.format(model.getValueAt(selectedRowIndex,1).toString()));
-                        eDes_t.setText(String.format(model.getValueAt(selectedRowIndex,2).toString()));
-
-                        borrowID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
-                    }
-                }
-        );
-         */
 
         JLabel opt_info = new JLabel("Please select one of the following options:");
         opt_info.setBounds(50,10,300,25);
@@ -570,7 +521,7 @@ public class deviceGUI extends Component implements ActionListener {
         userUN.setBounds(100,400,300,35);
         userUN.setFont(new Font("DIALOG", Font.BOLD, 16));
         String temEmail = user.getEmail();
-        userEmail = new JLabel("Email:" + temEmail);
+        userEmail = new JLabel("Email: " + temEmail);
         userEmail.setBounds(100,450,300,35);
         userEmail.setFont(new Font("DIALOG", Font.BOLD, 16));
 
@@ -585,7 +536,7 @@ public class deviceGUI extends Component implements ActionListener {
         //frame.dispose();
     }
 
-    public void disapleTable()
+    public void disableTable()
     {
         this.device_pan.remove(this.scrollPane);
     }
@@ -656,7 +607,7 @@ public class deviceGUI extends Component implements ActionListener {
         if(e.getSource() == show_tb) {
             deviceController device = new deviceController();
             String[][] table = device.showTable();
-            disapleTable();
+            disableTable();
             addJtable(table);
         }
 
@@ -676,7 +627,7 @@ public class deviceGUI extends Component implements ActionListener {
                 if (table == null && err == "") {
                     JOptionPane.showMessageDialog(null, "Model ID does not exist!", "Search", JOptionPane.ERROR_MESSAGE);
                 }
-                disapleTable();
+                disableTable();
                 addJtable(table);
             }
             else if(type == "Item Type")
@@ -687,7 +638,7 @@ public class deviceGUI extends Component implements ActionListener {
                     JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
                 }
                 String[][] table = device.searchType(temp);
-                disapleTable();
+                disableTable();
                 addJtable(table);
             }
             else if (type == "Username")
@@ -701,7 +652,7 @@ public class deviceGUI extends Component implements ActionListener {
                 if (table == null && err == null) {
                     JOptionPane.showMessageDialog(null, "Username does not exist!", "Search", JOptionPane.ERROR_MESSAGE);
                 }
-                disapleTable();
+                disableTable();
                 addJtable(table);
             }
         }
@@ -731,13 +682,13 @@ public class deviceGUI extends Component implements ActionListener {
             }
 
 
-            disapleTable();
+            disableTable();
             addJtable(device.showTable());
         }
 
         if(e.getSource() == remove_b) {
             //remove button
-            String temp = rID_t.getText().toString();
+            String temp = rID_t.getText();
             deviceController device = new deviceController();
             int result = device.deleteDevice(temp);
             if (result  == -1 || result == 0 ) {
@@ -746,7 +697,7 @@ public class deviceGUI extends Component implements ActionListener {
             else if (result == 1){
                 JOptionPane.showMessageDialog(null, "Device Deleted!", "Remove", JOptionPane.INFORMATION_MESSAGE);
             }
-            disapleTable();
+            disableTable();
             addJtable(device.showTable());
         }
 
@@ -765,7 +716,7 @@ public class deviceGUI extends Component implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Device Edited!", "Edit", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
-            disapleTable();
+            disableTable();
             addJtable(device.showTable());
         }
 
@@ -773,6 +724,73 @@ public class deviceGUI extends Component implements ActionListener {
         if(e.getSource() == borrow_b) {
             //Borrow button
             System.out.println("Pressed borrow button");
+            deviceController device = new deviceController();
+            String realUN = getUN();
+            String UN = borrowUname_t.getText();
+            String ED = bDate_t.getText();
+            String ID = borrowID_t.getText();
+            String err = "";
+            if(borrowID_t.equals(""))
+            {
+                err += "Please select a device first.\n";
+                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(UN.equals(""))
+            {
+                err += "Invalid Username: Username is empty.\n";
+                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(!device.checkUN(UN))
+            {
+                err += "Invalid Username: Username does not exist.\n";
+                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(!UN.equals(realUN))
+            {
+                err += "Invalid Username: This is not the same username for login.\n" +
+                        "Please use your own username to borrow device.\n";
+                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(UN.equals(""))
+            {
+                err += "Invalid Expire Date: Date is empty.\n";
+                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+            }else
+            {
+                try {
+                    if(device.dateValidator(ED) == -2)
+                    {
+                        err += "Invalid expire date setting: Date format wrong.\n";
+                        JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else if(device.dateValidator(ED) == -1)
+                    {
+                        err += "Invalid expire date setting: Date should be later than current date.\n";
+                        JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+            if(device.checkCanBorrow(ID))
+            {
+                err += "Sorry this device is occupied.\n";
+                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+            }
+
+            try {
+                if(device.dateValidator(ED) == 1 && (err.equals("")))
+                {
+                    if(device.borrowDevice(ID, UN, ED))
+                    {
+                        System.out.println("BORROW SUCCESS");
+                        disableTable();
+                        addJtable(device.showTable());
+                    }
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
 
         if(e.getSource() == return_b) {

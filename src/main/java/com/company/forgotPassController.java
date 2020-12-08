@@ -47,10 +47,12 @@ public class forgotPassController {
         }catch (SQLException se) {
             finalResult = -2;
             se.printStackTrace();
+            return finalResult;
         } catch (Exception e) {
             //Error handling for Class.forName
             finalResult = -2;
             e.printStackTrace();
+            return finalResult;
         }
 
         String recipient = email;

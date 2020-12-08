@@ -116,20 +116,20 @@ public class loginGUI extends Component implements ActionListener {
             String uname = user_text.getText();
             loginController login = new loginController();
             if(login.UNValidator(uname) == "spaceWrong") {
-                error_msg += "Invalid input: Username contains spaces.\n";
+                error_msg += "Invalid input: Username should not contain spaces.\n";
             }
             else if(login.UNValidator(uname) == "characterWrong") {
-                error_msg += "Invalid input: Username contains special characters.\n";
+                error_msg += "Invalid input: Username should not contain special characters.\n";
             }
 
             if(login.passwordValidator(pass) == "lengthWrong") {
-                error_msg += "Invalid input: Password (invalid Length).\n";
+                error_msg += "Invalid input: Password (invalid Length, password should be in 6 ~ 15 characters).\n";
             }
             else if(login.passwordValidator(pass) == "spaceWrong") {
-                error_msg += "Invalid input: Password contains spaces.\n";
+                error_msg += "Invalid input: Password should not contain spaces.\n";
             }
             else if(login.passwordValidator(pass) == "characterWrong") {
-                error_msg += "Invalid input: Password contains special characters.\n";
+                error_msg += "Invalid input: Password should not contain special characters.\n";
             }
 
 

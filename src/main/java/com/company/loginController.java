@@ -1,3 +1,4 @@
+
 package com.company;
 
 import java.sql.*;
@@ -120,7 +121,7 @@ public class loginController
         String checkResult = "";
         boolean check = true;
         // for checking if password length is between 8 and 15
-        if (!((password.length() >= 8) && (password.length() <= 15)) && check)
+        if (!((password.length() >= 6) && (password.length() <= 15)) && check)
         {
             checkResult = "lengthWrong";
             check = false;

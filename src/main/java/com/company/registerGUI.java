@@ -174,11 +174,11 @@ public class registerGUI extends Component implements ActionListener {
             }
 
             if (pass_tem.length() == 0) {
-                error_msg += "Invalid Password: Empty Username.\n";
+                error_msg += "Invalid Password: Empty Password.\n";
             }
-            else if(reg.passwordValidator(pass_tem))
+            else if(!reg.passwordValidator(pass_tem))
             {
-                error_msg += "Invalid Password: Password should have 6 ~ 15 characters.\n No spaces.\n Only letters are allowed.\n";
+                error_msg += "Invalid Password: Password should have 6 ~ 15 characters.\nNo spaces and only letters are allowed.\n";
             }
 
             if (!(pass_tem.equals(cpass_tem))) {
@@ -194,17 +194,16 @@ public class registerGUI extends Component implements ActionListener {
             //    error_msg += "\n";
             //}
 
-            if (error_msg.equals("") && reg.checkUname(uname_tem) == false) {
-                error_msg += "Username already exists.\n";
-            }
-
             if (!error_msg.equals("")) {
                 JOptionPane.showMessageDialog(null, error_msg, "Register", JOptionPane.ERROR_MESSAGE);
+            }
+            else if (reg.checkUname(uname_tem) == false) {
+                JOptionPane.showMessageDialog(null, "Username already exists.", "Register", JOptionPane.ERROR_MESSAGE);
             }
             else {
                 int id_temp = Integer.parseInt(id_tem);
                 String result = reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
-                //need fix
+                //need fix email
                 JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Register", JOptionPane.INFORMATION_MESSAGE);
             }
         }

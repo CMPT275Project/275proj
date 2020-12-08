@@ -295,7 +295,7 @@ public class registerController {
             message.setFrom(new InternetAddress(sender));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject("[Device Inventory System] - Test Email");
-            message.setText("Hello" + ", \n\n" + "This is only a TEST email.\n" + "Thank you so much and have a nice day.\n\n\n" +
+            message.setText("Hello" + ", \n\n" + "This is a confirmation email.\n" + "Thank you for signing up.\n\n\n" +
                     "Regards,\n\n" + "Device Inventory System Team");
             Transport.send(message);
             return finalResult = true;

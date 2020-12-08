@@ -1,6 +1,9 @@
 package com.company;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class deviceController
 {
@@ -418,7 +421,7 @@ public class deviceController
 
     //borrow device
     //output boolean result
-    public boolean borrowDevice(String modelID, String username)
+    public boolean borrowDevice(String modelID, String username, String expireDate)
     {
         boolean finalCheck = false;
         stmt = null;
@@ -427,11 +430,46 @@ public class deviceController
             connectDB();
             stmt = con.createStatement();
             String sql = "UPDATE deviceInventory SET reserve = '"+username+"' WHERE modelID = '"+modelID+"'";
+            String sql2 = "UPDATE deviceInventory SET expireDate = '"+expireDate+"' WHERE modelID = '"+modelID+"'";
             stmt.executeUpdate(sql);
+            stmt.executeUpdate(sql2);
             stmt.close();
             con.close();
-            if(checkOneItem(modelID, "reserve", username))
+            if(checkOneItem(modelID, "reserve", username) && checkOneItem(modelID, "expireDate", expireDate))
                 finalCheck = true;
+        }catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return finalCheck;
+    }
+
+    //check if device can be borrowed
+    public boolean checkCanBorrow(String modelID)
+    {
+        boolean finalCheck = false;
+        stmt = null;
+        con = null;
+        try {
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "SELECT reserve, expireDate FROM deviceInventory WHERE modelID = '"+modelID+"'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                String RSV = rs.getString(1);
+                String ED = rs.getString(2);
+                if(!RSV.equals("NA") || !ED.equals("NA"))
+                {
+                    finalCheck = true;
+                }
+            }
+            rs.close();
+            stmt.close();
+            con.close();
         }catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -468,7 +506,6 @@ public class deviceController
             e.printStackTrace();
         }
         return finalCheck;
-
     }
 
     //edit device
@@ -532,6 +569,38 @@ public class deviceController
         else
             checkResult = true;
         return checkResult;
+    }
+
+    //check the input date is valid
+    //return -2 if date format is wrong
+    //return -1 if the date is not late than current date
+    //return 1 if the date is good
+    public int dateValidator(String tempDay)throws Exception {
+        int result = 0;
+        if(tempDay.equals(""))
+        {return -2;}
+        else
+        {
+            //set current date
+            SimpleDateFormat ft = new SimpleDateFormat("dd/MM/yyyy");
+            Date day = new Date();
+            Date TpDay = new SimpleDateFormat("dd/MM/yyyy").parse(tempDay);
+
+            System.out.println("current date:" + ft.format(day));
+            System.out.println("input date:" + ft.format(TpDay));
+            ft.setLenient(false);
+            try {
+                ft.parse(tempDay.trim());
+                //compare date
+                if(TpDay.before(day))
+                    result = -1;
+                else
+                    result = 1;
+            } catch (ParseException pe) {
+                return -2;
+            }
+        }
+        return result;
     }
 
 
