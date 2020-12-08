@@ -12,12 +12,12 @@ import java.awt.Component;
 public class deviceGUI extends Component implements ActionListener {
     private static JFrame frame;
     private static JPanel main_panel, device_pan, account_pan;
-    private static JPanel sel_pan, sel_pan2;
+    private static JPanel sel_pan;
     private static JLabel title, date, user_icon, userID, userType, userFN, userLN, userUN, userEmail;
-    private static JLabel searchType_l, sID_l, sType_l, sUname_l, aID_l, aType_l, aDes_l,aAvail_l, aCond_l;
+    private static JLabel searchType_l, sID_l, sType_l, sUname_l, aID_l, aType_l, aDes_l,aAvail_l, aCond_l, reID_l, reUname_l;
     private static JLabel rID_l, rType_l, rDes_l, eID_l, eType_l, eDes_l, eAvail_l, eCond_l, borrowID_l, borrowUname_l, bDate_l;
     private static JTextField textField1, textField2, textField3, textField4, textField5, textField6, textField7;
-    private static JTextField sID_t, sType_t, sUname_t, aID_t, aType_t, aDes_t;
+    private static JTextField sID_t, sType_t, sUname_t, aID_t, aType_t, aDes_t, reID_t, reUname_t;
     private static JTextField rID_t, rType_t, rDes_t, eID_t, eType_t, eDes_t, borrowID_t ,borrowUname_t, bDate_t;
     private static JTabbedPane tp;
     private static JTable device_table;
@@ -145,6 +145,12 @@ public class deviceGUI extends Component implements ActionListener {
         edit_sel.setBounds(350, 40, 100,35);
         edit_sel.setFont(new Font("DIALOG", Font.BOLD, 14));
         device_pan.add(edit_sel);
+
+        if (roleType.equals("Student")) {
+            add_sel.setEnabled(false);
+            remove_sel.setEnabled(false);
+            edit_sel.setEnabled(false);
+        }
 
         // CAT2
         borrow_sel = new JRadioButton("Borrow");
@@ -309,7 +315,7 @@ public class deviceGUI extends Component implements ActionListener {
         JLabel borrow_info = new JLabel("Note: Please select the item from the table below.");
         borrow_info.setBounds(280,20,300,25);
 
-        borrowID_l = new JLabel("Item ID");
+        borrowID_l = new JLabel("Model ID");
         borrowID_l.setBounds(10,20,100,25);
         borrowID_t = new JTextField();
         borrowID_t.setBounds(100,20,130,25);
@@ -339,6 +345,16 @@ public class deviceGUI extends Component implements ActionListener {
         return_b.setBounds(390,140,90,30);
         return_b.setFont(new Font("DIALOG", Font.BOLD, 13));
         return_b.addActionListener(this);
+        reID_l = new JLabel("Model ID");
+        reID_l.setBounds(10,20,100,25);
+        reID_t = new JTextField();
+        reID_t.setBounds(100,20,130,25);
+        reID_t.setEditable(false);
+        reUname_l = new JLabel("Username");
+        reUname_l.setBounds(10,60,100,25);
+        reUname_t = new JTextField();
+        reUname_t.setBounds(100,60,130,25);
+
 
         // Switching the panel content based on the option
         search_sel.addActionListener(new ActionListener() {
@@ -442,14 +458,16 @@ public class deviceGUI extends Component implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (return_sel.isSelected()) {
                     sel_pan.removeAll();
+                    sel_pan.add(reID_l);
+                    sel_pan.add(reID_t);
+                    sel_pan.add(reUname_l);
+                    sel_pan.add(reUname_t);
                     sel_pan.add(return_b);
                     sel_pan.revalidate();
                     sel_pan.repaint();
                 }
             }
         });
-
-
 
 
         // JCombobox for search by type
@@ -501,27 +519,27 @@ public class deviceGUI extends Component implements ActionListener {
         userInfo user = new userInfo();
         user.setInfo(UN);
         String temID = user.getID();
-        userID = new JLabel("Accout ID: " + temID);
+        userID = new JLabel("Accout ID:            " + temID);
         userID.setBounds(100,200,300,35);
         userID.setFont(new Font("DIALOG", Font.BOLD, 16));
         String temType = user.getType();
-        userType = new JLabel("Account Type: " + temType);
+        userType = new JLabel("Account Type:    " + temType);
         userType.setBounds(100,250,300,35);
         userType.setFont(new Font("DIALOG", Font.BOLD, 16));
         String temFN = user.getFN();
-        userFN = new JLabel("First Name: " + temFN);
+        userFN = new JLabel("First Name:          " + temFN);
         userFN.setBounds(100,300,300,35);
         userFN.setFont(new Font("DIALOG", Font.BOLD, 16));
         String temLN = user.getLN();
-        userLN = new JLabel("Last Name:" + temLN);
+        userLN = new JLabel("Last Name:          " + temLN);
         userLN.setBounds(100,350,300,35);
         userLN.setFont(new Font("DIALOG", Font.BOLD, 16));
         String temUN = user.getUserName();
-        userUN = new JLabel("Username: " + temUN);
+        userUN = new JLabel("Username:           " + temUN);
         userUN.setBounds(100,400,300,35);
         userUN.setFont(new Font("DIALOG", Font.BOLD, 16));
         String temEmail = user.getEmail();
-        userEmail = new JLabel("Email: " + temEmail);
+        userEmail = new JLabel("Email:                    " + temEmail);
         userEmail.setBounds(100,450,300,35);
         userEmail.setFont(new Font("DIALOG", Font.BOLD, 16));
 
@@ -594,8 +612,14 @@ public class deviceGUI extends Component implements ActionListener {
                         eID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
                         eType_t.setText(String.format(model.getValueAt(selectedRowIndex,1).toString()));
                         eDes_t.setText(String.format(model.getValueAt(selectedRowIndex,2).toString()));
+                        //
+                        eAvail_t.setSelectedItem(String.format(model.getValueAt(selectedRowIndex,3).toString()));
+                        eCond_t.setSelectedItem(String.format(model.getValueAt(selectedRowIndex,6).toString()));
 
                         borrowID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
+
+                        reID_t.setText(String.format(model.getValueAt(selectedRowIndex,0).toString()));
+                        reUname_t.setText(String.format(model.getValueAt(selectedRowIndex,4).toString()));
                     }
                 }
         );
@@ -730,10 +754,11 @@ public class deviceGUI extends Component implements ActionListener {
             String ED = bDate_t.getText();
             String ID = borrowID_t.getText();
             String err = "";
+            // need check
             if(borrowID_t.equals(""))
             {
                 err += "Please select a device first.\n";
-                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
             }
             else if(UN.equals(""))
             {

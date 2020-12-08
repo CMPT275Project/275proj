@@ -1,5 +1,6 @@
 package com.company;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -44,13 +45,16 @@ public class Main {
 
 
  */
+        deviceGUI g = new deviceGUI();
+        g.deviceWindow("aaa","Admin");
 
+        registerController reg = new registerController();
 
         //loginGUI login_win = new loginGUI();
         //login_win.loginWindow();
 
-        loginGUI de = new loginGUI();
-        de.loginWindow();
+        //loginGUI de = new loginGUI();
+        //de.loginWindow();
         //deviceController test = new deviceController();
         //System.out.println(test.dateValidator("08/12/2020"));
         //deviceGUI table = new deviceGUI();

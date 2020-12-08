@@ -189,11 +189,6 @@ public class registerGUI extends Component implements ActionListener {
                 error_msg += "Please select the account type.\n";
             }
 
-            //if(sendTestEmail(email_tem) == false)
-            //{
-            //    error_msg += "\n";
-            //}
-
             if (!error_msg.equals("")) {
                 JOptionPane.showMessageDialog(null, error_msg, "Register", JOptionPane.ERROR_MESSAGE);
             }
@@ -201,10 +196,16 @@ public class registerGUI extends Component implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Username already exists.", "Register", JOptionPane.ERROR_MESSAGE);
             }
             else {
-                int id_temp = Integer.parseInt(id_tem);
-                String result = reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
-                //need fix email
-                JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Register", JOptionPane.INFORMATION_MESSAGE);
+
+                if (!reg.sendTestEmail(email_tem)) {
+                    JOptionPane.showMessageDialog(null, "Something went wrong! (Email) ", "Register", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    int id_temp = Integer.parseInt(id_tem);
+                    String result = reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
+                    //need fix email
+                    JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Register", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         }
     }
