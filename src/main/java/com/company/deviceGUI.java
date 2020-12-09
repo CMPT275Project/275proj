@@ -24,7 +24,7 @@ public class deviceGUI extends Component implements ActionListener {
     private static JScrollPane scrollPane;
     private static JRadioButton search_sel, add_sel, remove_sel, edit_sel, borrow_sel, return_sel;
     private static JComboBox searchType, aAvail_t, aCond_t, eAvail_t, eCond_t;
-    private static JButton search_b, add_b, remove_b, edit_b, borrow_b, return_b, logout, show_tb, rClear_b, eClear_b, bClear_b;
+    private static JButton search_b, add_b, remove_b, edit_b, borrow_b, return_b, logout, show_tb, rClear_b, eClear_b, bClear_b, reClear_b;
     public String username;
     public void setUN(String UN){this.username = UN;}
     public String getUN(){return this.username;}
@@ -341,6 +341,8 @@ public class deviceGUI extends Component implements ActionListener {
 
 
         // Component for Return
+        JLabel return_info = new JLabel("Note: Please select the item from the table below.");
+        return_info.setBounds(280,20,300,25);
         return_b = new JButton("Return");
         return_b.setBounds(390,140,90,30);
         return_b.setFont(new Font("DIALOG", Font.BOLD, 13));
@@ -354,6 +356,12 @@ public class deviceGUI extends Component implements ActionListener {
         reUname_l.setBounds(10,60,100,25);
         reUname_t = new JTextField();
         reUname_t.setBounds(100,60,130,25);
+        reUname_t.setEditable(false);
+        reClear_b = new JButton("Clear");
+        reClear_b.setBounds(300,140,70,30);
+        reClear_b.addActionListener(this);
+        JLabel reUname_info = new JLabel("(reserve)");
+        reUname_info.setBounds(100,90,130,25);
 
 
         // Switching the panel content based on the option
@@ -458,11 +466,14 @@ public class deviceGUI extends Component implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (return_sel.isSelected()) {
                     sel_pan.removeAll();
+                    sel_pan.add(return_info);
+                    sel_pan.add(reUname_info);
                     sel_pan.add(reID_l);
                     sel_pan.add(reID_t);
                     sel_pan.add(reUname_l);
                     sel_pan.add(reUname_t);
                     sel_pan.add(return_b);
+                    sel_pan.add(reClear_b);
                     sel_pan.revalidate();
                     sel_pan.repaint();
                 }
@@ -734,7 +745,7 @@ public class deviceGUI extends Component implements ActionListener {
             }
             else {
                 if (result == false) {
-                    JOptionPane.showMessageDialog(null, "Unable to delete the device!", "Edit", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Unable to edit the device!", "Edit", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Device Edited!", "Edit", JOptionPane.INFORMATION_MESSAGE);
@@ -760,7 +771,7 @@ public class deviceGUI extends Component implements ActionListener {
                 err += "Please select a device first.\n";
                 JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
             }
-            else if(UN.equals(""))
+            else if(UN.length() == 0)
             {
                 err += "Invalid Username: Username is empty.\n";
                 JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
@@ -820,7 +831,7 @@ public class deviceGUI extends Component implements ActionListener {
 
         if(e.getSource() == return_b) {
             //return button
-            System.out.println("Pressed return button");
+
         }
 
         if(e.getSource() == rClear_b) {
@@ -839,6 +850,11 @@ public class deviceGUI extends Component implements ActionListener {
             borrowID_t.setText("");
             borrowUname_t.setText("");
             bDate_t.setText("");
+        }
+
+        if(e.getSource() == reClear_b) {
+            reID_t.setText("");
+            reUname_t.setText("");
         }
 
         if(e.getSource() == logout) {
