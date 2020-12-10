@@ -1,9 +1,13 @@
 package com.company;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 public class deviceController
 {
@@ -431,11 +435,13 @@ public class deviceController
             stmt = con.createStatement();
             String sql = "UPDATE deviceInventory SET reserve = '"+username+"' WHERE modelID = '"+modelID+"'";
             String sql2 = "UPDATE deviceInventory SET expireDate = '"+expireDate+"' WHERE modelID = '"+modelID+"'";
+            String sql3 = "UPDATE deviceInventory SET availability = 'No' WHERE modelID = '"+modelID+"'";
             stmt.executeUpdate(sql);
             stmt.executeUpdate(sql2);
+            stmt.executeUpdate(sql3);
             stmt.close();
             con.close();
-            if(checkOneItem(modelID, "reserve", username) && checkOneItem(modelID, "expireDate", expireDate))
+            if(checkOneItem(modelID, "reserve", username) && checkOneItem(modelID, "expireDate", expireDate) && checkOneItem(modelID, "availability", "No"))
                 finalCheck = true;
         }catch (SQLException se) {
             //Handle errors for JDBC
@@ -588,11 +594,139 @@ public class deviceController
         return finalCheck;
     }
 
+    //check if device can be borrowed
+    public boolean checkCanReturn(String modelID)
+    {
+        boolean finalCheck = false;
+        stmt = null;
+        con = null;
+        try {
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "SELECT reserve FROM deviceInventory WHERE modelID = '"+modelID+"'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                String RSV = rs.getString(1);
+                if(RSV.equals("NA"))
+                {
+                    finalCheck = true;
+                }
+            }
+            rs.close();
+            stmt.close();
+            con.close();
+        }catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return finalCheck;
+    }
+
+    //check expire date
+    //return true if the expire date has passed, and send a email for recording use
+    public boolean checkED(String modelID, String username)
+    {
+        boolean finalCheck = false;
+        Date current = new Date();
+        stmt = null;
+        con = null;
+        try{
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "SELECT expireDate FROM deviceInventory WHERE modelID = '"+modelID+"'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                String ED = rs.getString(1);
+                if(this.checkExpire(ED, current))
+                {
+                    finalCheck = true;
+                    this.sendRecordEmail(username,modelID);
+                }
+            }
+        }catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return finalCheck;
+    }
+
+    //send record email
+    public void sendRecordEmail(String username, String modelID)
+    {
+        stmt = null;
+        con = null;
+        String email = "";
+        try{
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "SELECT email FROM userLogin WHERE username = '"+username+"'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                email = rs.getString(1);
+
+            }
+        }catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+
+        String recipient = email;
+        String sender = "cmpt275proj@gmail.com";
+        String emailPwd = "275group17";
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getDefaultInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(sender, emailPwd);
+            }
+        });
+        try{
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(sender));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+            message.setSubject("[Device Inventory System] - Record Email");
+            message.setText("Hello" + ", \n\n" + "This is a record email.\n" + "The student with username:" + username+
+                    " does not return device: " + modelID + ", on time.\n\n\n" +
+                    "Regards,\n\n" + "Device Inventory System Team");
+            Transport.send(message);
+        }
+        catch (Exception e) {
+        }
+    }
+
+    //if current date late than expire date, return true
+    public boolean checkExpire(String expireDate, Date current) throws ParseException
+    {
+        boolean finalCheck = false;
+        Date ED = new SimpleDateFormat("dd/MM/yyyy").parse(expireDate);
+        if (ED.before(current)) {
+            finalCheck = true;
+        }
+        return finalCheck;
+    }
+
     public boolean inputValidator(String password)
     {
         boolean checkResult = false;
         boolean check = true;
-
         // for special characters
         if ((password.contains("@") || password.contains("#")
                 || password.contains("~")
@@ -631,7 +765,6 @@ public class deviceController
                 ft.parse(tempDay.trim());
                 if (tempDay.length() == 10) {
                     if (TpDay.before(day)) {
-                        System.out.println(tempDay);
                         result = -1;
                     }
                     else {

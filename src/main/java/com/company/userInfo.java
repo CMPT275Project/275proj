@@ -59,17 +59,6 @@ public class userInfo{
         }
     }
 
-
-
-    public void getInfo(String uname) {
-        /*setUserName();
-        setEmail();
-        setType();
-        setFN();
-        setLN();
-        setID();*/
-    }
-
     //getter
     public String getEmail() {
         return this.email;

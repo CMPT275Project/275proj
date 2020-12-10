@@ -115,55 +115,6 @@ public class registerController {
         return checkUNExist;
     }
 
-    //update user password
-    //take 2 PARAMETERS, output a String result;
-    //if userID NOT exist, result = UNNotExist;
-    //if userID exist, then will change the new user pwd and apply update checking;
-    //if update checking is false, result = pwdUpdWrong;
-    //if update checking is true, result = pwdChangeSuccess
-    public String changePassword(String username, String password)
-    {
-        stmt = null;
-        con = null;
-        String check = "";
-        boolean checkUNExist = false;
-        try {
-            connectDB();
-            stmt = con.createStatement();
-            String sql = "SELECT * FROM userLogin WHERE username = '"+username+"'";
-            ResultSet rsId = stmt.executeQuery(sql);
-            if (rsId.next()) {
-                String USERNAME = rsId.getString("username");
-                if (username.equals(USERNAME)) {
-                    checkUNExist = true;
-                }
-            } else {
-                rsId.close();
-                stmt.close();
-                con.close();
-                return check = "UNNotExist";
-            }if (checkUNExist) {
-                rsId.close();
-                //insert into new info
-                String sql2 = "UPDATE userLogin SET password = '"+password+"' WHERE username = '"+username+"'";
-                stmt.executeUpdate(sql2);
-                stmt.close();
-                con.close();
-            }
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        }
-        //apply checking update
-        if(checkOneItem(username, "password", password))
-            check = "pwdChangeSuccess";
-        else
-            check = "pwdUpdWrong";
-        return check;
-    }
 
     //apply checking on ONE item
     //take 3 PARAMETERS, output a boolean result;

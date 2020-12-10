@@ -11,7 +11,7 @@ import java.awt.Component;
 
 public class deviceGUI extends Component implements ActionListener {
     private static JFrame frame;
-    private static JPanel main_panel, device_pan, account_pan;
+    private static JPanel device_pan, account_pan;
     private static JPanel sel_pan;
     private static JLabel title, date, user_icon, userID, userType, userFN, userLN, userUN, userEmail;
     private static JLabel searchType_l, sID_l, sType_l, sUname_l, aID_l, aType_l, aDes_l,aAvail_l, aCond_l, reID_l, reUname_l;
@@ -262,7 +262,7 @@ public class deviceGUI extends Component implements ActionListener {
         rDes_t.setEditable(false);
         rDes_t.setBorder(BorderFactory.createLineBorder(Color.black));
         remove_b = new JButton("Remove");
-        remove_b.setBounds(150,150,80,30);
+        remove_b.setBounds(150,150,90,30);
         remove_b.setFont(new Font("DIALOG", Font.BOLD, 12));
         remove_b.addActionListener(this);
         rClear_b = new JButton("Clear");
@@ -599,7 +599,6 @@ public class deviceGUI extends Component implements ActionListener {
         device_table.setRowHeight(40);
         device_table.getColumnModel().getColumn(2).setPreferredWidth(150);//change column size
         device_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        //device_table.setAutoCreateRowSorter(true); // this will cause the selection problem
         device_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // For table row selection (device page)
@@ -759,7 +758,6 @@ public class deviceGUI extends Component implements ActionListener {
         // this point
         if(e.getSource() == borrow_b) {
             //Borrow button
-            System.out.println("Pressed borrow button");
             deviceController device = new deviceController();
             String realUN = getUN();
             String UN = borrowUname_t.getText();
@@ -843,15 +841,25 @@ public class deviceGUI extends Component implements ActionListener {
                 err += "Please select a device first.\n";
                 JOptionPane.showMessageDialog(null, err, "Return", JOptionPane.ERROR_MESSAGE);
             }
+            else if(device.checkCanReturn(ID))
+            {
+                err += "This device is not been borrowed.\n";
+                JOptionPane.showMessageDialog(null, err, "Return", JOptionPane.ERROR_MESSAGE);
+            }
             else if(!UN.equals(getUN()) && Type.equals("Student"))
             {
                 err += "Please select the device borrowed by you.\n";
                 JOptionPane.showMessageDialog(null, err, "Return", JOptionPane.ERROR_MESSAGE);
             }else
             {
+                String result = "";
+                if(device.checkED(ID, UN))
+                {
+                    result += "WARNING! You have passed the expire date for returning this device.\n";
+                }
                 if(device.returnDevice(ID))
                 {
-                    String result = "Return success.\n";
+                    result += "Return success.\n";
                     JOptionPane.showMessageDialog(null, result, "Return", JOptionPane.INFORMATION_MESSAGE);
                     disableTable();
                     addJtable(device.showTable());
