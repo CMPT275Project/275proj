@@ -141,7 +141,7 @@ public class registerGUI extends Component implements ActionListener {
             if (id_tem.length() == 0) {
                 error_msg += "Invalid ID: Empty ID\n";
             } else if (!reg.IDValidator(id_tem)) {
-                error_msg += "Invalid ID: only integers are allowed. No spaces.\n";
+                error_msg += "Invalid ID: only integers are allowed. No spaces. Maximum 9 digits.\n";
             }
 
             if (fname_tem.length() == 0) {
