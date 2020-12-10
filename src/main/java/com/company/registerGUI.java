@@ -165,12 +165,12 @@ public class registerGUI extends Component implements ActionListener {
             if (uname_tem.length() == 0) {
                 error_msg += "Invalid Username: Empty Username.\n";
             }
+            else if (!reg.UNValidator(uname_tem)) {
+                error_msg += "Invalid Username: Only letters are allowed. No spaces.\n";
+            }
             else if(reg.checkUname(uname_tem))
             {
                 error_msg += "Invalid Username: Username already exists.\n";
-            }
-            else if (!reg.UNValidator(uname_tem)) {
-                error_msg += "Invalid Username: Only letters are allowed. No spaces.\n";
             }
 
             if (pass_tem.length() == 0) {
@@ -192,18 +192,14 @@ public class registerGUI extends Component implements ActionListener {
             if (!error_msg.equals("")) {
                 JOptionPane.showMessageDialog(null, error_msg, "Register", JOptionPane.ERROR_MESSAGE);
             }
-            else if (reg.checkUname(uname_tem) == false) {
-                JOptionPane.showMessageDialog(null, "Username already exists.", "Register", JOptionPane.ERROR_MESSAGE);
-            }
             else {
-
                 if (!reg.sendTestEmail(email_tem)) {
                     JOptionPane.showMessageDialog(null, "Something went wrong! (Email) ", "Register", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
                     int id_temp = Integer.parseInt(id_tem);
                     String result = reg.addUserInfo(id_temp, uname_tem, fname_tem, lname_tem, actype_tem, email_tem, pass_tem);
-                    //need fix email
+
                     JOptionPane.showMessageDialog(null, "Successfully Signed up ", "Register", JOptionPane.INFORMATION_MESSAGE);
                 }
             }

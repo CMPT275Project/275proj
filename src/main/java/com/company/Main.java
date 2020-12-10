@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class Main {
     public static void main(String[] args) throws Exception {
         // write your code here
-        System.out.println("testtestt02222000est");
+        System.out.println("Start");
         loginController testReg = new loginController();
         //boolean result = testReg.addUserInfo(222,"asdasd","aa","student", "fk@a.ca","qwe");
 
@@ -45,25 +45,17 @@ public class Main {
 
 
  */
-        deviceGUI g = new deviceGUI();
-        g.deviceWindow("aaa","Admin");
+        /*deviceGUI g = new deviceGUI();
+        g.deviceWindow("aaa","Student");
+        deviceController k = new deviceController();
+        String date = "1/01/2021";
+        int re = k.dateValidator(date);
+        System.out.println(re);*/
 
-        registerController reg = new registerController();
+        loginGUI login_win = new loginGUI();
+        login_win.loginWindow();
 
-        //loginGUI login_win = new loginGUI();
-        //login_win.loginWindow();
 
-        //loginGUI de = new loginGUI();
-        //de.loginWindow();
-        //deviceController test = new deviceController();
-        //System.out.println(test.dateValidator("08/12/2020"));
-        //deviceGUI table = new deviceGUI();
-        //table.deviceWindow("aaa", "Admin");
-        //String[][] row = table.showTable();
-        //System.out.println(row);
-        //registerController test = new registerController();
-        //boolean result = test.sendTestEmail("cmpt275proj@gmail.com");
-        //System.out.println(result);
     }
 
 

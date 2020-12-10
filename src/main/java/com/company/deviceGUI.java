@@ -25,12 +25,13 @@ public class deviceGUI extends Component implements ActionListener {
     private static JRadioButton search_sel, add_sel, remove_sel, edit_sel, borrow_sel, return_sel;
     private static JComboBox searchType, aAvail_t, aCond_t, eAvail_t, eCond_t;
     private static JButton search_b, add_b, remove_b, edit_b, borrow_b, return_b, logout, show_tb, rClear_b, eClear_b, bClear_b, reClear_b;
-    public String username;
+    public String username, Type;
     public void setUN(String UN){this.username = UN;}
     public String getUN(){return this.username;}
 
     public void deviceWindow(String username, String roleType) {
         //Getting the account type from Login
+        this.Type = roleType;
         String actype = roleType;
         String UN = username;
         setUN(username);
@@ -225,7 +226,7 @@ public class deviceGUI extends Component implements ActionListener {
         aDes_t.setBounds(100,100,130,25);
         aAvail_l = new JLabel("Availability");
         aAvail_l.setBounds(280,20,100,25);
-        String[] atype = {"yes", "No"};
+        String[] atype = {"Yes", "No"};
         aAvail_t = new JComboBox(atype);
         aAvail_t.setBounds(380,20,100,25);
         aCond_l = new JLabel("Condition");
@@ -293,7 +294,7 @@ public class deviceGUI extends Component implements ActionListener {
         eDes_t.setBounds(100,100,130,25);
         eAvail_l = new JLabel("Availability");
         eAvail_l.setBounds(280,20,100,25);
-        String[] atype1 = {"yes", "No"};
+        String[] atype1 = {"Yes", "No"};
         eAvail_t = new JComboBox(atype1);
         eAvail_t.setBounds(380,20,100,25);
         eCond_l = new JLabel("Condition");
@@ -551,7 +552,7 @@ public class deviceGUI extends Component implements ActionListener {
         userUN.setFont(new Font("DIALOG", Font.BOLD, 16));
         String temEmail = user.getEmail();
         userEmail = new JLabel("Email:                    " + temEmail);
-        userEmail.setBounds(100,450,300,35);
+        userEmail.setBounds(100,450,500,35);
         userEmail.setFont(new Font("DIALOG", Font.BOLD, 16));
 
         account_pan.add(userID);
@@ -739,7 +740,7 @@ public class deviceGUI extends Component implements ActionListener {
         if(e.getSource() == edit_b) {
             //edit button
             deviceController device = new deviceController();
-            boolean result = device.edit(eID_t.getText(), eType_t.getText(), eDes_t.getText(), eAvail_t.getSelectedItem().toString(), eCond_t.getSelectedItem().toString());
+            boolean result = device.edit(eID_t.getText(), eDes_t.getText(), eAvail_t.getSelectedItem().toString(), eCond_t.getSelectedItem().toString());
             if (device.inputValidator(eDes_t.getText()) == false ) {
                 JOptionPane.showMessageDialog(null, "Invalid Input: Contains special characters.", "Edit", JOptionPane.ERROR_MESSAGE);
             }
@@ -766,52 +767,53 @@ public class deviceGUI extends Component implements ActionListener {
             String ID = borrowID_t.getText();
             String err = "";
             // need check
-            if(borrowID_t.equals(""))
+            if(ID.equals(""))
             {
                 err += "Please select a device first.\n";
                 JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
             }
-            else if(UN.length() == 0)
+            else if(device.checkCanBorrow(ID))
+            {
+                err += "Sorry this device is occupied or not available.\n";
+                JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(UN.equals(""))
             {
                 err += "Invalid Username: Username is empty.\n";
-                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
             }
             else if(!device.checkUN(UN))
             {
                 err += "Invalid Username: Username does not exist.\n";
-                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
             }
-            else if(!UN.equals(realUN))
+            else if(!UN.equals(realUN) && Type.equals("Student"))
             {
                 err += "Invalid Username: This is not the same username for login.\n" +
                         "Please use your own username to borrow device.\n";
-                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
             }
             else if(UN.equals(""))
             {
                 err += "Invalid Expire Date: Date is empty.\n";
-                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
-            }else
+                JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
+            }
+            else
             {
                 try {
                     if(device.dateValidator(ED) == -2)
                     {
-                        err += "Invalid expire date setting: Date format wrong.\n";
-                        JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                        err += "Invalid expire date setting: Date format wrong.\n You input is " +ED+ ". Make sure the format is dd/mm/yyyy";
+                        JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
                     }
                     else if(device.dateValidator(ED) == -1)
                     {
                         err += "Invalid expire date setting: Date should be later than current date.\n";
-                        JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, err, "Borrow", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
-            }
-            if(device.checkCanBorrow(ID))
-            {
-                err += "Sorry this device is occupied.\n";
-                JOptionPane.showMessageDialog(null, err, "Search", JOptionPane.ERROR_MESSAGE);
             }
 
             try {
@@ -819,7 +821,8 @@ public class deviceGUI extends Component implements ActionListener {
                 {
                     if(device.borrowDevice(ID, UN, ED))
                     {
-                        System.out.println("BORROW SUCCESS");
+                        String result = "Borrow device success.\n";
+                        JOptionPane.showMessageDialog(null, result, "Borrow", JOptionPane.INFORMATION_MESSAGE);
                         disableTable();
                         addJtable(device.showTable());
                     }
@@ -831,7 +834,31 @@ public class deviceGUI extends Component implements ActionListener {
 
         if(e.getSource() == return_b) {
             //return button
-
+            deviceController device = new deviceController();
+            String ID = reID_t.getText();
+            String UN = reUname_t.getText();
+            String err = "";
+            if(ID.equals(""))
+            {
+                err += "Please select a device first.\n";
+                JOptionPane.showMessageDialog(null, err, "Return", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(!UN.equals(getUN()) && Type.equals("Student"))
+            {
+                err += "Please select the device borrowed by you.\n";
+                JOptionPane.showMessageDialog(null, err, "Return", JOptionPane.ERROR_MESSAGE);
+            }else
+            {
+                if(device.returnDevice(ID))
+                {
+                    String result = "Return success.\n";
+                    JOptionPane.showMessageDialog(null, result, "Return", JOptionPane.INFORMATION_MESSAGE);
+                    disableTable();
+                    addJtable(device.showTable());
+                }
+                else
+                {System.out.println("error");}
+            }
         }
 
         if(e.getSource() == rClear_b) {
@@ -859,7 +886,6 @@ public class deviceGUI extends Component implements ActionListener {
 
         if(e.getSource() == logout) {
             //edit button
-            System.out.println("Pressed logout button");
             frame.dispose();
             JOptionPane.showMessageDialog(null, "Log out Successfully", "Log out", JOptionPane.INFORMATION_MESSAGE);
         }

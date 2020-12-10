@@ -456,13 +456,13 @@ public class deviceController
         try {
             connectDB();
             stmt = con.createStatement();
-            String sql = "SELECT reserve, expireDate FROM deviceInventory WHERE modelID = '"+modelID+"'";
+            String sql = "SELECT availability, reserve FROM deviceInventory WHERE modelID = '"+modelID+"'";
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next())
             {
-                String RSV = rs.getString(1);
-                String ED = rs.getString(2);
-                if(!RSV.equals("NA") || !ED.equals("NA"))
+                String AVA = rs.getString(1);
+                String RSV = rs.getString(2);
+                if(!RSV.equals("NA") || AVA.equals("No"))
                 {
                     finalCheck = true;
                 }
@@ -509,7 +509,7 @@ public class deviceController
     }
 
     //edit device
-    public boolean edit(String modelID, String deviceType, String description, String availability, String cond)
+    public boolean edit(String modelID, String description, String availability, String cond)
     {
         boolean finalCheck = false;
         boolean descriptionUpdate = false;
@@ -548,6 +548,46 @@ public class deviceController
         return finalCheck;
     }
 
+    //return device
+    public boolean returnDevice(String modelID)
+    {
+        boolean finalCheck = false;
+        boolean RsvUpdate = false;
+        boolean EDUpdate = false;
+        boolean AVAUpdate = false;
+        stmt = null;
+        con = null;
+        try{
+            connectDB();
+            stmt = con.createStatement();
+            String sql = "UPDATE deviceInventory SET reserve = 'NA' WHERE modelID ='"+modelID+"'";
+            String sql2 = "UPDATE deviceInventory SET expireDate = 'NA' WHERE modelID ='"+modelID+"'";
+            String sql3 = "UPDATE deviceInventory SET availability = 'Yes' WHERE modelID ='"+modelID+"'";
+            stmt.executeUpdate(sql);
+            stmt.executeUpdate(sql2);
+            stmt.executeUpdate(sql3);
+            stmt.close();
+            con.close();
+
+            //check edit update
+            if(checkOneItem(modelID, "reserve", "NA"))
+                RsvUpdate = true;
+            if(checkOneItem(modelID, "expireDate", "NA"))
+                EDUpdate = true;
+            if(checkOneItem(modelID, "availability", "Yes"))
+                AVAUpdate = true;
+            if(RsvUpdate && EDUpdate && AVAUpdate)
+                finalCheck = true;
+        }catch (SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }
+        return finalCheck;
+    }
+
     public boolean inputValidator(String password)
     {
         boolean checkResult = false;
@@ -577,26 +617,31 @@ public class deviceController
     //return 1 if the date is good
     public int dateValidator(String tempDay)throws Exception {
         int result = 0;
-        if(tempDay.equals(""))
-        {return -2;}
+        if(tempDay.equals("")) {
+            return -2;
+        }
         else
         {
-            //set current date
-            SimpleDateFormat ft = new SimpleDateFormat("dd/MM/yyyy");
-            Date day = new Date();
-            Date TpDay = new SimpleDateFormat("dd/MM/yyyy").parse(tempDay);
-
-            System.out.println("current date:" + ft.format(day));
-            System.out.println("input date:" + ft.format(TpDay));
-            ft.setLenient(false);
             try {
+                //set current date
+                SimpleDateFormat ft = new SimpleDateFormat("dd/MM/yyyy");
+                Date day = new Date();
+                Date TpDay = new SimpleDateFormat("dd/MM/yyyy").parse(tempDay);
+                ft.setLenient(false);
                 ft.parse(tempDay.trim());
-                //compare date
-                if(TpDay.before(day))
-                    result = -1;
-                else
-                    result = 1;
-            } catch (ParseException pe) {
+                if (tempDay.length() == 10) {
+                    if (TpDay.before(day)) {
+                        System.out.println(tempDay);
+                        result = -1;
+                    }
+                    else {
+                        result = 1;
+                    }
+                }
+                else {
+                    result = -2;
+                }
+            } catch (Exception pe) {
                 return -2;
             }
         }

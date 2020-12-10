@@ -300,7 +300,7 @@ public class registerController {
             Transport.send(message);
             return finalResult = true;
         }
-        catch (MessagingException e) {
+        catch (Exception e) {
             return finalResult = false;
         }
     }
