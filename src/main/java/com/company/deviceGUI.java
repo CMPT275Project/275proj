@@ -62,7 +62,7 @@ public class deviceGUI extends Component implements ActionListener {
 
         String tem_date = java.time.LocalDate.now().toString();
         date = new JLabel("Today: " + tem_date);
-        date.setBounds(800,20,150,35);
+        date.setBounds(780,20,170,35);
         date.setFont(new Font("DIALOG", Font.BOLD, 16));
         frame.add(date);
 
@@ -120,7 +120,7 @@ public class deviceGUI extends Component implements ActionListener {
         addJtable(table.showTable());
 
         JLabel opt_info = new JLabel("Please select one of the following options:");
-        opt_info.setBounds(50,10,300,25);
+        opt_info.setBounds(50,10,350,25);
         opt_info.setFont(new Font("DIALOG", Font.BOLD, 14));
         device_pan.add(opt_info);
 
@@ -177,7 +177,7 @@ public class deviceGUI extends Component implements ActionListener {
         show_tb.setBounds(700,380,100,30);
         device_pan.add(show_tb);
         show_tb.addActionListener(this);
-        JTextArea show_info = new JTextArea("Please use the (Show All) button \nto refresh the table");
+        JTextArea show_info = new JTextArea("Please use the (Show All)\nbutton to refresh \nthe table");
         show_info.setBounds(700,420,190,50);
         show_info.setBackground(new Color(224, 224, 224));
         device_pan.add(show_info);
@@ -242,7 +242,7 @@ public class deviceGUI extends Component implements ActionListener {
 
         // Components for remove
         JLabel remove_info = new JLabel("Note: Please select the item from the table below.");
-        remove_info.setBounds(280,20,300,25);
+        remove_info.setBounds(280,20,350,25);
         rID_l = new JLabel("Model ID");
         rID_l.setBounds(10,20,100,25);
         rID_t = new JTextField();
@@ -274,7 +274,7 @@ public class deviceGUI extends Component implements ActionListener {
 
         // Components for edit
         JTextArea edit_info = new JTextArea("Note: \n1. Please select the item from the table below.\n2. Please remove and add the item \nif you would like to change the Model ID or Item Type");
-        edit_info.setBounds(10,150,300,50);
+        edit_info.setBounds(10,150,350,50);
         edit_info.setBackground(new Color(224, 224, 224));
         eID_l = new JLabel("Model ID");
         eID_l.setBounds(10,20,100,25);
@@ -314,7 +314,7 @@ public class deviceGUI extends Component implements ActionListener {
 
         // Component for Borrow
         JLabel borrow_info = new JLabel("Note: Please select the item from the table below.");
-        borrow_info.setBounds(280,20,300,25);
+        borrow_info.setBounds(280,20,350,25);
 
         borrowID_l = new JLabel("Model ID");
         borrowID_l.setBounds(10,20,100,25);
@@ -343,7 +343,7 @@ public class deviceGUI extends Component implements ActionListener {
 
         // Component for Return
         JLabel return_info = new JLabel("Note: Please select the item from the table below.");
-        return_info.setBounds(280,20,300,25);
+        return_info.setBounds(280,20,350,25);
         return_b = new JButton("Return");
         return_b.setBounds(390,140,90,30);
         return_b.setFont(new Font("DIALOG", Font.BOLD, 13));
@@ -523,7 +523,7 @@ public class deviceGUI extends Component implements ActionListener {
         // Panel for account
         user_icon = new JLabel();
         user_icon.setBounds(80,50,150,150);
-        user_icon.setIcon(new ImageIcon("src/icons.png"));
+        user_icon.setIcon(new ImageIcon("icons.png"));
         account_pan.add(user_icon);
         account_pan.validate();
 

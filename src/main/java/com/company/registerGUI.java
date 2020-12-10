@@ -87,7 +87,7 @@ public class registerGUI extends Component implements ActionListener {
 
         cpass = new JLabel("Confirm Password");
         cpass.setFont(new Font("DIALOG", Font.BOLD, 16));
-        cpass.setBounds(50,450,150,25);
+        cpass.setBounds(50,450,160,25);
         panel.add(cpass);
         cpass_t = new JTextField();
         cpass_t.setFont(new Font("DIALOG", Font.PLAIN, 14));

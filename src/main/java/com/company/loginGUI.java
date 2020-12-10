@@ -112,23 +112,23 @@ public class loginGUI extends Component implements ActionListener {
 
         if(e.getSource() == signin){
             String error_msg = "";
-            String pass = pass_text.getText();
+            String pass = new String(pass_text.getPassword());
             String uname = user_text.getText();
             loginController login = new loginController();
-            if(login.UNValidator(uname) == "spaceWrong") {
+            if(login.UNValidator(uname).equals("spaceWrong")) {
                 error_msg += "Invalid input: Username should not contain spaces.\n";
             }
-            else if(login.UNValidator(uname) == "characterWrong") {
+            else if(login.UNValidator(uname).equals("characterWrong")) {
                 error_msg += "Invalid input: Username should not contain special characters.\n";
             }
 
-            if(login.passwordValidator(pass) == "lengthWrong") {
+            if(login.passwordValidator(pass).equals("lengthWrong")) {
                 error_msg += "Invalid input: Password (invalid Length, password should be in 6 ~ 15 characters).\n";
             }
-            else if(login.passwordValidator(pass) == "spaceWrong") {
+            else if(login.passwordValidator(pass).equals("spaceWrong")) {
                 error_msg += "Invalid input: Password should not contain spaces.\n";
             }
-            else if(login.passwordValidator(pass) == "characterWrong") {
+            else if(login.passwordValidator(pass).equals("characterWrong")) {
                 error_msg += "Invalid input: Password should not contain special characters.\n";
             }
 
